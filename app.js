@@ -1,24 +1,12 @@
-var http = require('http');
+var express = require('express');
+var request = require('request');
 
-http.createServer(onRequest).listen(3000);
+var apiServerHost = 'https://congress.api.sunlightfoundation.com';
+var app = express();
 
-function onRequest(client_req, client_res) {
-  console.log('serve: ' + client_req.url);
+app.use('/', function(req, res) {
+  var url = apiServerHost + req.url;
+  req.pipe(request(url)).pipe(res);
+});
 
-  var options = {
-    hostname: 'https://congress.api.sunlightfoundation.com',
-    port: 80,
-    path: client_req.url,
-    method: 'GET'
-  };
-
-  var proxy = http.request(options, function (res) {
-    res.pipe(client_res, {
-      end: true
-    });
-  });
-
-  client_req.pipe(proxy, {
-    end: true
-  });
-}
+app.listen(process.env.PORT || 3000);
