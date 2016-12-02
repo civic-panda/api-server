@@ -1,42 +1,24 @@
+var http = require('http');
 
-/**
- * Module dependencies.
- */
+http.createServer(onRequest).listen(3000);
 
-var express = require('express')
-, routes = require('./routes')
-, mongoose = require('mongoose')
-, bodyParser = require('body-parser')
-, methodOverride = require('method-override')
-, serveStatic = require('serve-static')
-, errorHandler = require('errorhandler');
+function onRequest(client_req, client_res) {
+  console.log('serve: ' + client_req.url);
 
-mongoose.connect(process.env.MONGOLAB_URI || "mongodb://localhost/mongo_test");
+  var options = {
+    hostname: 'https://congress.api.sunlightfoundation.com',
+    port: 80,
+    path: client_req.url,
+    method: 'GET'
+  };
 
-var app = express(); //module.exports = express.createServer();
+  var proxy = http.request(options, function (res) {
+    res.pipe(client_res, {
+      end: true
+    });
+  });
 
-// Configuration
-
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(serveStatic(__dirname + '/public'));
-
-// Routes
-
-app.get('/', routes.index);
-
-// load errorHandler after routes
-
-if (process.env.NODE_ENV !== "production") {
-  app.use(errorHandler({ dumpExceptions: true, showStack: true }));
-} else {
-  app.use(errorHandler());
+  client_req.pipe(proxy, {
+    end: true
+  });
 }
-
-
-var port = process.env.PORT || 3000;
-app.listen(port, function(){
-  console.log("Express server listening on port %d in %s mode", process.env.PORT, app.settings.env);
-});
