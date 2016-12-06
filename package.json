@@ -4,13 +4,17 @@
   "private": true,
   "scripts": {
     "postinstall": "npm run load-data",
-    "load-data": "if cd congress-data; then git pull; else git clone git://github.com/unitedstates/congress-legislators.git congress-data; fi"
+    "clone-congress": "if cd congress-data; then git pull; else git clone git://github.com/unitedstates/congress-legislators.git congress-data; fi",
+    "convert-congress": "yaml2json congress-data/legislators-current.yaml --save",
+    "load-data": "clone-congress && convert-congress"
   },
   "dependencies": {
     "cors": "^2.8.1",
     "express": "4.10.7",
     "ms": "^0.7.2",
-    "request": "^2.79.0"
+    "node-fetch": "^1.6.3",
+    "request": "^2.79.0",
+    "yamljs": "^0.2.8"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
