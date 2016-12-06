@@ -2,6 +2,10 @@
   "name": "my-node-app",
   "version": "0.0.1",
   "private": true,
+  "scripts": {
+    "postinstall": "npm run load-data",
+    "load-data": "if cd node_modules/congress-data; then git pull; else git clone git://github.com/unitedstates/congress-legislators.git node_modules/congress-data; fi"
+  },
   "dependencies": {
     "cors": "^2.8.1",
     "express": "4.10.7",
