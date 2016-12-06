@@ -6,7 +6,7 @@
     "postinstall": "npm run load-data",
     "clone-congress": "if cd congress-data; then git pull; else git clone git://github.com/unitedstates/congress-legislators.git congress-data; fi",
     "convert-congress": "yaml2json congress-data/legislators-current.yaml --save",
-    "load-data": "clone-congress && convert-congress"
+    "load-data": "npm run clone-congress && npm run convert-congress"
   },
   "dependencies": {
     "cors": "^2.8.1",
