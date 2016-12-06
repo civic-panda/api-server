@@ -7,10 +7,12 @@ var congress = require('./congress-data/legislators-current.json');
 var apiServerHost = 'https://congress.api.sunlightfoundation.com';
 var app = express();
 
-var getReps = (state, district) => congress.filter(congressPerson => {
-  var latestTerm = congressPerson.terms[congressPerson.terms.length - 1];
-  return latestTerm.state === state && (latestTerm.type === 'sen' || latestTerm.district === district)
-});
+function getReps(state, district) {
+  return congress.filter(function(congressPerson) {
+    var latestTerm = congressPerson.terms[congressPerson.terms.length - 1];
+    return latestTerm.state === state && (latestTerm.type === 'sen' || latestTerm.district === district)
+  });
+}
 
 app.use(function (req, res, next) {
   if (req.headers.origin) {
@@ -35,8 +37,10 @@ app.use('/congress', function(req, res) {
 app.use('/', function(req, res) {
   var url = apiServerHost + req.url;
   return fetch(url)
-    .then((response) => response.json())
-    .then((json) => {
+    .then(function(response) {
+      return response.json()
+    })
+    .then(function(json) {
       if (json.results && json.results.length) {
         var state = json.results[0].state;
         var district = json.results[0].district;
@@ -49,7 +53,9 @@ app.use('/', function(req, res) {
 
       res.json({ state, district, reps });
     })
-    .catch(err => console.log(err));
+    .catch(function(err) {
+      console.log(err)
+    });
 });
 
 app.listen(process.env.PORT || 3000);
