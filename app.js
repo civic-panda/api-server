@@ -51,7 +51,7 @@ app.use('/', function(req, res) {
         var reps = [];
       }
 
-      res.json({ state, district, reps });
+      res.json({ state: state, district: district, reps: reps });
     })
     .catch(function(err) {
       console.log(err)
