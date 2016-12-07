@@ -1,18 +1,13 @@
 import * as express from 'express';
-// import request from 'request';
-// import fetch from 'node-fetch';
+import * as morgan from 'morgan';
+import fetch from 'node-fetch';
 
-import congress from './congress';
+import * as congress from './congress';
 
-// var apiServerHost = 'https://congress.api.sunlightfoundation.com';
+var apiServerHost = 'https://congress.api.sunlightfoundation.com';
 var app = express();
 
-// function getReps(state, district) {
-//   return congress.filter(function(congressPerson) {
-//     var latestTerm = congressPerson.terms[congressPerson.terms.length - 1];
-//     return latestTerm.state === state && (latestTerm.type === 'sen' || latestTerm.district === district)
-//   });
-// }
+app.use(morgan('dev'));
 
 app.use((req, res, next) => {
   if (req.header('Origin')) {
@@ -26,36 +21,22 @@ app.use((req, res, next) => {
   return next();
 });
 
-app.use('/test', (_req, res) => {
-  res.send('hello world');
+app.use('/', async (req, res) => {
+  const url = apiServerHost + req.url;
+  const response = await fetch(url);
+  const json = await response.json();
+
+  if (json.results && json.results.length) {
+    const state = json.results[0].state;
+    const district = json.results[0].district;
+    const representatives = congress.getRepresentatives(state, district);
+    const senators = congress.getSenators(state);
+
+    res.json({ state, district, representatives, senators });
+  } else {
+    res.json({});
+  }
+
 });
-
-app.use('/congress', (_req, res) => {
-  res.json(congress);
-});
-
-// app.use('/', function(req, res) {
-//   var url = apiServerHost + req.url;
-//   return fetch(url)
-//     .then(function(response) {
-//       return response.json()
-//     })
-//     .then(function(json) {
-//       if (json.results && json.results.length) {
-//         var state = json.results[0].state;
-//         var district = json.results[0].district;
-//         var reps = getReps(state, district);
-//       } else {
-//         var state = null;
-//         var district = null;
-//         var reps = [];
-//       }
-
-//       res.json({ state: state, district: district, reps: reps });
-//     })
-//     .catch(function(err) {
-//       console.log(err)
-//     });
-// });
 
 app.listen(process.env.PORT || 3000);
