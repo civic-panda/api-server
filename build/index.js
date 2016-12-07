@@ -1,10 +1,10 @@
 "use strict";
-const express_1 = require("express");
+const express = require("express");
 // import request from 'request';
 // import fetch from 'node-fetch';
-require("./congress");
+const congress_1 = require("./congress");
 // var apiServerHost = 'https://congress.api.sunlightfoundation.com';
-var app = express_1.default();
+var app = express();
 // function getReps(state, district) {
 //   return congress.filter(function(congressPerson) {
 //     var latestTerm = congressPerson.terms[congressPerson.terms.length - 1];
@@ -20,12 +20,12 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     return next();
 });
-app.use('/test', function (_req, res) {
+app.use('/test', (_req, res) => {
     res.send('hello world');
 });
-// app.use('/congress', function(req, res) {
-//   res.json(congress);
-// });
+app.use('/congress', (_req, res) => {
+    res.json(congress_1.default);
+});
 // app.use('/', function(req, res) {
 //   var url = apiServerHost + req.url;
 //   return fetch(url)
@@ -49,4 +49,4 @@ app.use('/test', function (_req, res) {
 //     });
 // });
 app.listen(process.env.PORT || 3000);
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=index.js.map

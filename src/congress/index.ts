@@ -1,3 +1,3 @@
-const congress = require('./legislators-current.json');
+const congress = require('../../data/legislators-current.json');
 
 export default congress;

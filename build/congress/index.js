@@ -1,4 +1,5 @@
 "use strict";
-const legislators_current_json_1 = require("json!./legislators-current.json");
-console.log(!!legislators_current_json_1.default);
+const congress = require('../../data/legislators-current.json');
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = congress;
 //# sourceMappingURL=index.js.map

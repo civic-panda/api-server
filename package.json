@@ -3,12 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "postinstall": "npm run load-data",
     "build": "rimraf build && tsc -p tsconfig.json",
     "start:dev": "nodemon",
     "start": "NODE_ENV=production node build/index.js",
     "clone-congress": "if cd congress-data; then git pull; else git clone git://github.com/unitedstates/congress-legislators.git congress-data; fi",
-    "convert-congress": "yaml2json congress-data/legislators-current.yaml > src/congress/legislators-current.json",
+    "convert-congress": "yaml2json congress-data/legislators-current.yaml > data/legislators-current.json",
     "load-data": "npm run clone-congress && npm run convert-congress"
   },
   "dependencies": {
