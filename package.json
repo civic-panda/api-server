@@ -23,7 +23,7 @@
     "request": "^2.79.0",
     "rimraf": "^2.5.4",
     "ts-node": "^1.7.0",
-    "typescript": "next",
+    "typescript": "^2.1.1",
     "yamljs": "^0.2.8"
   },
   "devDependencies": {},
