@@ -1,23 +1,32 @@
-const congress: CongressPerson[] = require('../../data/legislators-current.json');
+import { convertKeysToCamelCase } from '../util';
+
+const congress = convertKeysToCamelCase(require('../../data/legislators-current.json')) as CongressPerson[];
 
 interface Term {
-  type: 'rep' | 'sen';
   start: string;
   end: string;
   state: string;
-  district?: number;
-  class?: number;
-  state_rank: string;
   party: string;
   caucus: string;
-  party_affiliations: string;
+  partyAffiliations: string;
   url: string;
   address: string;
   phone: string;
   fax: string;
-  contact_form: string;
+  contactForm: string;
   office: string;
-  rss_url: string;
+  rssUrl: string;
+}
+
+interface RepTerm extends Term {
+  type: 'rep';
+  district: number;
+}
+
+interface SenTerm extends Term {
+  type: 'sen';
+  class: number;
+  stateRank: 'junior' | 'senior';
 }
 
 interface CongressPerson {
@@ -32,33 +41,33 @@ interface CongressPerson {
     wikipedia: string;
     ballotpedia: string;
     maplight: number;
-    house_history: number;
+    houseHistory: number;
     icpsr: number;
-  },
+  };
   name: {
     first: string;
     middle: string;
     last: string;
     nickname?: string;
     suffix?: string;
-    official_full?: string;
-  },
+    officialFull?: string;
+  };
   bio: {
     birthday: string;
     gender: 'M' | 'F';
     religion?: string;
-  },
-  terms: Term[],
+  };
+  terms: (SenTerm | RepTerm)[];
 }
 
 export const getRepresentatives = (state: string, district: number) =>
   congress.filter((congressPerson) => {
     const latestTerm = congressPerson.terms[congressPerson.terms.length - 1];
-    return latestTerm.state === state && latestTerm.district === district;
+    return latestTerm.type === 'rep' && latestTerm.state === state && latestTerm.district === district;
   });
 
 export const getSenators = (state: string) =>
   congress.filter((congressPerson) => {
     const latestTerm = congressPerson.terms[congressPerson.terms.length - 1];
-    return latestTerm.state === state && latestTerm.type === 'sen';
+    return latestTerm.type === 'sen' && latestTerm.state === state;
   });
