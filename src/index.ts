@@ -4,8 +4,8 @@ import fetch from 'node-fetch';
 
 import * as congress from './congress';
 
-var apiServerHost = 'https://congress.api.sunlightfoundation.com';
-var app = express();
+const apiServerHost = 'https://congress.api.sunlightfoundation.com';
+const app = express();
 
 app.use(morgan('dev'));
 
@@ -19,6 +19,24 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   return next();
+});
+
+app.get('/data', async (_req, res) => {
+  const issuesUrl = 'http://localhost:8000/api/issues';
+  const tasksUrl = 'http://localhost:8000/api/tasks';
+  const responses = await Promise.all([fetch(issuesUrl), fetch(tasksUrl)]);
+  const [{ issues }, { tasks }] = await Promise.all(responses.map(response => response.json()));
+
+  issues.map((issue: any) => issue.id = issue._id);
+  tasks.map((task: any) => {
+    task.id = task._id;
+    if (task.location.geo) {
+      const [longitude, latitude] = task.location.geo;
+      task.location.longitude = longitude;
+      task.location.latitude = latitude;
+    }
+  });
+  res.json({ issues, tasks });
 });
 
 app.use('/', async (req, res) => {
