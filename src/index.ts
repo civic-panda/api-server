@@ -22,8 +22,8 @@ app.use((req, res, next) => {
 });
 
 app.get('/data', async (_req, res) => {
-  const issuesUrl = 'http://localhost:8000/api/issues';
-  const tasksUrl = 'http://localhost:8000/api/tasks';
+  const issuesUrl = 'https://admin.actonthis.org/api/issues';
+  const tasksUrl = 'https://admin.actonthis.org/api/tasks';
   const responses = await Promise.all([fetch(issuesUrl), fetch(tasksUrl)]);
   const [{ issues }, { tasks }] = await Promise.all(responses.map(response => response.json()));
 
