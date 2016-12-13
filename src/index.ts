@@ -1,13 +1,21 @@
 import * as express from 'express';
+import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
+import * as cors from 'cors';
+// import * as request from 'request';
 import fetch from 'node-fetch';
 
 import * as congress from './congress';
 
-const apiServerHost = 'https://congress.api.sunlightfoundation.com';
+const cmsUrl = 'http://localhost:8000';
+// const cmsUrl = 'https://admin.actonthis.org';
+const sunlightUrl = 'https://congress.api.sunlightfoundation.com';
 const app = express();
 
 app.use(morgan('dev'));
+app.use(bodyParser.json());
+
+app.options('*', cors());
 
 app.use((req, res, next) => {
   if (req.header('Origin')) {
@@ -22,8 +30,8 @@ app.use((req, res, next) => {
 });
 
 app.get('/data', async (_req, res) => {
-  const issuesUrl = 'https://admin.actonthis.org/api/issues';
-  const tasksUrl = 'https://admin.actonthis.org/api/tasks';
+  const issuesUrl = cmsUrl + '/api/issues';
+  const tasksUrl = cmsUrl + '/api/tasks';
   const responses = await Promise.all([fetch(issuesUrl), fetch(tasksUrl)]);
   const [{ issues }, { tasks }] = await Promise.all(responses.map(response => response.json()));
 
@@ -39,8 +47,26 @@ app.get('/data', async (_req, res) => {
   res.json({ issues, tasks });
 });
 
+app.post('/email-subscribers', async (req, res) => {
+  try {
+    const response = await fetch(cmsUrl + '/api/email-subscribers', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(req.body),
+    });
+    if (response.ok) {
+      const json = await response.json();
+      res.send(json);
+    } else {
+      throw response;
+    }
+  } catch (e) {
+    res.sendStatus(e.status || 400);
+  }
+});
+
 app.use('/', async (req, res) => {
-  const url = apiServerHost + req.url;
+  const url = sunlightUrl + req.url;
   const response = await fetch(url);
   const json = await response.json();
 
