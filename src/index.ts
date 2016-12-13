@@ -7,8 +7,8 @@ import fetch from 'node-fetch';
 
 import * as congress from './congress';
 
-const cmsUrl = 'http://localhost:8000';
-// const cmsUrl = 'https://admin.actonthis.org';
+// const cmsUrl = 'http://localhost:8000';
+const cmsUrl = 'https://admin.actonthis.org';
 const sunlightUrl = 'https://congress.api.sunlightfoundation.com';
 const app = express();
 
