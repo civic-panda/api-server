@@ -1,6 +1,6 @@
-import { convertKeysToCamelCase } from '../util';
-
-const congress = convertKeysToCamelCase(require('../../data/legislators-current.json')) as CongressPerson[];
+const congress = require('../../data/legislators-current.json') as CongressPerson[];
+const committees = require('../../data/committees-current.json') as Committee[];
+const committeeMembership = require('../../data/committee-membership-current.json') as CommitteeMembership;
 
 interface Term {
   start: string;
@@ -60,6 +60,44 @@ interface CongressPerson {
   terms: (SenTerm | RepTerm)[];
 }
 
+interface Committee {
+  type: 'house' | 'senate' | 'joint';
+  name: string;
+  thomasId: string;
+  senateCommitteeId?: string;
+  houseCommitteeId?: string;
+  jurisdiction: string;
+  jurisdictionSource: string;
+  url: string;
+  address: string;
+  phone: string;
+  rssUrl: string;
+  minorityRssUrl: string;
+
+  subcommittees: Subcommittee[];
+}
+
+interface Subcommittee {
+  name: string;
+  thomasId: string;
+  address: string;
+  phone: string;
+  wikipedia?: string;
+}
+
+interface Membership {
+  name: string;
+  party: string;
+  rank: number;
+  title: string;
+  bioguide: string;
+  thomas: string;
+}
+
+interface CommitteeMembership {
+  [id: string]: Membership[];
+}
+
 export const getRepresentatives = (state: string, district: number) =>
   congress.filter((congressPerson) => {
     const latestTerm = congressPerson.terms[congressPerson.terms.length - 1];
@@ -71,3 +109,32 @@ export const getSenators = (state: string) =>
     const latestTerm = congressPerson.terms[congressPerson.terms.length - 1];
     return latestTerm.type === 'sen' && latestTerm.state === state;
   });
+
+export const getCommitteeMembers = (committeeId: string, subcommitteeId?: string) => {
+  let committee;
+  let subcommittee;
+  let members;
+
+  committee = committees.find(committee => committee.thomasId === committeeId);
+
+  if (!committee) {
+    console.log(committeeId, subcommitteeId);
+    throw 'committee not found';
+  }
+
+  if (subcommitteeId) {
+    subcommittee = committee.subcommittees.find(subcommittee => subcommittee.thomasId === subcommitteeId);
+  }
+
+  const membership = committeeMembership[`${committeeId}${subcommitteeId}`] || [];
+  const memberIds = membership.map(member => member.bioguide);
+
+  members = congress.filter(congressPerson => memberIds.indexOf(congressPerson.id.bioguide) > -1);
+
+  return {
+    members,
+    committee,
+    subcommittee,
+  }
+}
+

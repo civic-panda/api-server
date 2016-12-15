@@ -47,6 +47,14 @@ app.get('/data', async (_req, res) => {
   res.json({ issues, tasks });
 });
 
+app.get('/committees/:committeeId/subcommittees/:subcommitteeId', async (req, res) => {
+  res.json(congress.getCommitteeMembers(req.params.committeeId, req.params.subcommitteeId));
+});
+
+app.get('/committees/:committeeId', async (req, res) => {
+  res.json(congress.getCommitteeMembers(req.params.committeeId));
+});
+
 app.post('/email-subscribers', async (req, res) => {
   try {
     const response = await fetch(cmsUrl + '/api/email-subscribers', {
