@@ -7,7 +7,7 @@ import fetch from 'node-fetch';
 
 import * as congress from './congress';
 
-// const cmsUrl = 'http://localhost:8000';
+// const cmsUrl = 'http://localhost:3000';
 const cmsUrl = 'https://admin.actonthis.org';
 const sunlightUrl = 'https://congress.api.sunlightfoundation.com';
 const app = express();
@@ -43,16 +43,28 @@ app.get('/data', async (_req, res) => {
       task.location.longitude = longitude;
       task.location.latitude = latitude;
     }
+    const committee = task.templateProps.committee;
+    if (committee && task.templateProps[committee + '_subcommittee']) {
+      task.templateProps.subcommittee = task.templateProps[committee + '_subcommittee'];
+    }
   });
   res.json({ issues, tasks });
 });
 
 app.get('/committees/:committeeId/subcommittees/:subcommitteeId', async (req, res) => {
-  res.json(congress.getCommitteeMembers(req.params.committeeId, req.params.subcommitteeId));
+  try {
+    res.json(congress.getCommitteeMembers(req.params.committeeId, req.params.subcommitteeId));
+  } catch (e) {
+    res.sendStatus(404);
+  }
 });
 
 app.get('/committees/:committeeId', async (req, res) => {
-  res.json(congress.getCommitteeMembers(req.params.committeeId));
+  try {
+    res.json(congress.getCommitteeMembers(req.params.committeeId));
+  } catch (e) {
+    res.sendStatus(404);
+  }
 });
 
 app.post('/email-subscribers', async (req, res) => {

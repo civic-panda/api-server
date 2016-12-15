@@ -110,7 +110,7 @@ export const getSenators = (state: string) =>
     return latestTerm.type === 'sen' && latestTerm.state === state;
   });
 
-export const getCommitteeMembers = (committeeId: string, subcommitteeId?: string) => {
+export const getCommitteeMembers = (committeeId: string, subcommitteeId: string = '') => {
   let committee;
   let subcommittee;
   let members;
@@ -122,14 +122,15 @@ export const getCommitteeMembers = (committeeId: string, subcommitteeId?: string
     throw 'committee not found';
   }
 
-  if (subcommitteeId) {
+  if (subcommitteeId.length) {
     subcommittee = committee.subcommittees.find(subcommittee => subcommittee.thomasId === subcommitteeId);
   }
 
   const membership = committeeMembership[`${committeeId}${subcommitteeId}`] || [];
-  const memberIds = membership.map(member => member.bioguide);
 
-  members = congress.filter(congressPerson => memberIds.indexOf(congressPerson.id.bioguide) > -1);
+  members = membership
+    .filter(member => member.rank === 1)
+    .map(member => congress.find(congressPerson => congressPerson.id.bioguide === member.bioguide))
 
   return {
     members,
