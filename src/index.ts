@@ -37,13 +37,14 @@ app.get('/data', async (_req, res) => {
 
   issues.map((issue: any) => issue.id = issue._id);
   tasks.map((task: any) => {
+    console.log('TASK', task)
     task.id = task._id;
     if (task.location.geo) {
       const [longitude, latitude] = task.location.geo;
       task.location.longitude = longitude;
       task.location.latitude = latitude;
     }
-    const committee = task.templateProps.committee;
+    const committee = task.templateProps ? task.templateProps.committee : undefined;
     if (committee && task.templateProps[committee + '_subcommittee']) {
       task.templateProps.subcommittee = task.templateProps[committee + '_subcommittee'];
     }
