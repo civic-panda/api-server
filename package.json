@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rimraf build && tsc -p tsconfig.json",
-    "postinstall": "npm run build",
+    "postinstall": "npm run build && npm run load-data",
     "start:dev": "nodemon",
     "start": "NODE_ENV=production node build/index.js",
     "clone-data": "if cd congress-data; then git pull; else git clone git://github.com/unitedstates/congress-legislators.git congress-data; fi",
