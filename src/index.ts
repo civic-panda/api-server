@@ -9,7 +9,7 @@ import * as congress from './congress';
 
 // const cmsUrl = 'http://localhost:3000';
 // const cmsUrl = 'https://admin.actonthis.org';
-const cmsUrl = 'https://act-on-this-cms-staging.herokuapp.com/';
+const cmsUrl = 'https://act-on-this-cms-staging.herokuapp.com';
 const sunlightUrl = 'https://congress.api.sunlightfoundation.com';
 const app = express();
 
@@ -35,10 +35,8 @@ app.get('/data', async (_req, res) => {
   const tasksUrl = cmsUrl + '/api/tasks';
   const responses = await Promise.all([fetch(issuesUrl), fetch(tasksUrl)]);
   const [{ issues }, { tasks }] = await Promise.all(responses.map(response => response.json()));
-
   issues.map((issue: any) => issue.id = issue._id);
   tasks.map((task: any) => {
-    console.log('TASK', task)
     task.id = task._id;
     if (task.location.geo) {
       const [longitude, latitude] = task.location.geo;
