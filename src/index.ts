@@ -81,6 +81,21 @@ app.get('/committees/:committeeId', async (req, res) => {
   }
 });
 
+app.get('/article', async (req, res) => {
+  try {
+    let url:string = req.query.url;
+    if (!url) {
+      url = 'http://www.slate.com/articles/double_x/doublex/2015/12/rape_victims_are_still_being_charged_for_rape_kits.html';
+    }
+    console.log("Fetching URL", url);
+
+    res.json(url);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(404);
+  }
+});
+
 app.post('/email-subscribers', async (req, res) => {
   try {
     const response = await fetch(cmsUrl + '/api/email-subscribers', {
