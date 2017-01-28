@@ -31,11 +31,11 @@ app.use((req, res, next) => {
 });
 
 app.get('/data', async (_req, res) => {
-  const issuesUrl = cmsUrl + '/api/issues';
+  const causesUrl = cmsUrl + '/api/causes';
   const tasksUrl = cmsUrl + '/api/tasks';
-  const responses = await Promise.all([fetch(issuesUrl), fetch(tasksUrl)]);
-  const [{ issues }, { tasks }] = await Promise.all(responses.map(response => response.json()));
-  issues.map((issue: any) => issue.id = issue._id);
+  const responses = await Promise.all([fetch(causesUrl), fetch(tasksUrl)]);
+  const [{ causes }, { tasks }] = await Promise.all(responses.map(response => response.json()));
+  causes.map((cause: any) => cause.id = cause._id);
   tasks.map((task: any) => {
     task.id = task._id;
     if (task.location.geo) {
@@ -48,7 +48,7 @@ app.get('/data', async (_req, res) => {
       task.templateProps.subcommittee = task.templateProps[committee + '_subcommittee'];
     }
   });
-  res.json({ issues, tasks });
+  res.json({ causes, tasks });
 });
 
 app.get('/committees/:committeeId/subcommittees/:subcommitteeId', async (req, res) => {
@@ -103,4 +103,6 @@ app.use('/', async (req, res) => {
 
 });
 
-app.listen(process.env.PORT || 8080);
+const port = process.env.PORT || 8080;
+app.listen(port);
+console.log(`listening on port ${port}`);
