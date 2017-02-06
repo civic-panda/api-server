@@ -2,9 +2,10 @@
 	"compileOnSave": true,
 	"compilerOptions": {
 			"target": "es6",
-			"outDir": "build",
 			"rootDir": "src",
+			"outDir": "build",
 			"module": "commonjs",
+			"jsx": "react",
 			"sourceMap": true,
 			"noImplicitAny": true,
 			"suppressImplicitAnyIndexErrors": true,

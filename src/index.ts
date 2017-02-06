@@ -2,9 +2,9 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
 import * as cors from 'cors';
-// import * as request from 'request';
 import fetch from 'node-fetch';
 
+import apiRouter from './controllers';
 import * as congress from './congress';
 
 const cmsUrl = 'http://localhost:3000';
@@ -15,6 +15,17 @@ const app = express();
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
+
+// if ( process.env.NODE_ENV === 'development') {
+  // console.log('getting bundle');
+  // app.get('/js/bundle.js', require('browserify-middleware')(__dirname + '/client/index.ts', {
+  //   extensions: ['ts']
+  // }));
+  // var browserify = require('browserify');
+  // var tsify = require('tsify');
+
+  // app.get('/js/bundle.js', express.static(__dirname + '/public'));
+// }
 
 app.options('*', cors());
 
@@ -29,6 +40,9 @@ app.use((req, res, next) => {
 
   return next();
 });
+
+app.use(express.static(__dirname + '/public'));
+app.use('/api', apiRouter);
 
 app.get('/data', async (_req, res) => {
   const causesUrl = cmsUrl + '/api/causes';
@@ -101,6 +115,16 @@ app.use('/', async (req, res) => {
     res.json({});
   }
 
+});
+
+app.use((err: any, _req: any, res: any, next:any) => {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).send('invalid token');
+  }
+
+  res.status(err.status).send(err);
+
+  return next();
 });
 
 const port = process.env.PORT || 8080;

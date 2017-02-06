@@ -1,0 +1,9 @@
+/* Nav */
+.nav-logo {
+  /* styles for journal-themed bootstrap */
+  padding: 0 15px;
+
+  /* styles for unthemed bootstrap */
+  /*height: 50px;*/
+  /*padding: 0 15px;*/
+}
