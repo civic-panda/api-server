@@ -8,7 +8,7 @@ interface Props extends BS.LabelProps {
   label?: string,
 }
 
-const colorMap = {
+export const colorMap = {
   admin: 'danger',
   owner: 'success',
   organizer: 'info',

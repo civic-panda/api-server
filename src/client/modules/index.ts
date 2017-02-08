@@ -5,6 +5,7 @@ import * as permissions from './permissions';
 import * as storage from './storage';
 import * as tasks from './tasks';
 import * as user from './user';
+import * as volunteers from './volunteers';
 
 export interface AppState {
   auth: auth.State;
@@ -12,6 +13,7 @@ export interface AppState {
   storage: storage.State;
   tasks: tasks.State;
   user: user.State;
+  volunteers: volunteers.State;
 }
 
 export {
@@ -21,4 +23,5 @@ export {
   storage,
   tasks,
   user,
+  volunteers,
 }

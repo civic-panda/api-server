@@ -4,7 +4,7 @@ import * as BS from 'react-bootstrap';
 import { Column, Row } from './Columns';
 
 interface Props {
-  columns: Column[];
+  columns: Column<any>[];
   rows: Row[];
   initialSort?: string;
   initialDirection?: 'ascending' | 'descending';
@@ -42,7 +42,7 @@ export class Table extends React.Component<Props, State>{
     this.setState({ sortBy: index })
   }
 
-  private getHiddenClasses = (column: Column) => column.hiddenAt ? column.hiddenAt.map(size => `hidden-${size}`).join(' ') : ''
+  private getHiddenClasses = (column: Column<any>) => column.hiddenAt ? column.hiddenAt.map(size => `hidden-${size}`).join(' ') : ''
 
   public render() {
     const { columns, rows, onClick } = this.props;
@@ -73,17 +73,19 @@ export class Table extends React.Component<Props, State>{
           ))}
         </tbody>
         {rows.length === 0 && (
-          <div
-            style={{
-              border: 'solid 1px silver',
-              padding: '2em',
-              textAlign: 'center',
-              position: 'absolute',
-              width: '100%',
-            }}
-          >
-            No Rows
-          </div>
+          <tbody>
+            <tr>
+              <td style={{
+                border: 'solid 1px silver',
+                padding: '2em',
+                textAlign: 'center',
+                position: 'absolute',
+                width: '100%',
+              }}>
+                No Rows
+              </td>
+            </tr>
+          </tbody>
         )}
       </BS.Table>
     );

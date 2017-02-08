@@ -63,6 +63,7 @@ const getTokensForUser = async (user: Partial<db.users>, deviceName?: string) =>
 export default {
   authenticate: authenticateUser,
   create: createUser,
+  findIn: User.findIn,
   findOne: User.findOne,
   getTokens: getTokensForUser,
   update: User.update,

@@ -1,26 +1,51 @@
-import { knexInstance } from '../db/knex';
+import db from '../db/schema';
+import * as permissions from '../util/permissions';
+import { Table, knexInstance } from '../db/knex';
 import Task from './Task';
+
+type ReturnedColumns = 'id' | 'userId' | 'causeId' | 'roleId';
+const returnedColumns: ReturnedColumns[] = ['id', 'userId', 'causeId', 'roleId']
+const UserRoles = new Table<db.causes_roles_users, ReturnedColumns>('causes_roles_users', returnedColumns);
 
 const getAll = (userId: string) => {
   /*
     SELECT
-      c.id,
-      c.name,
-      c.logo,
-      r.name as role
+      c.*,
+      roles.name as role
     FROM
-      causes_roles_users cru
-      INNER JOIN causes c ON c.id = cru."causeId"
-      INNER JOIN roles r ON r.id = cru."roleId"
-    WHERE
-      "userId" = `${userId}`
+      causes c
+    LEFT JOIN (
+      SELECT
+        *
+      FROM
+        causes_roles_users cru
+      WHERE
+        "userId" = 'c8df88b7-28a6-43ec-8b6e-af1e60b32ec7'
+    ) r
+    ON
+      c.id = "causeId"
+    LEFT JOIN
+      roles
+    ON
+      r."roleId" = roles.id
   */
+
   return knexInstance
-    .select('c.id', 'c.name', 'c.logo', 'r.name as role')
-    .from('causes_roles_users as cru')
-    .join('causes as c', 'c.id', 'causeId')
-    .join('roles as r', 'r.id', 'roleId')
-    .where('cru.userId', userId)
+    .select('c.*', 'roles.name as role', 'roles.id as roleId')
+    .from('causes as c')
+    .joinRaw(`
+      LEFT JOIN (
+        SELECT
+        *
+        FROM
+        causes_roles_users cru
+        WHERE
+        "userId" = '${userId}'
+      ) r
+      ON
+      c.id = "causeId"
+    `)
+    .leftJoin('roles', 'r.roleId', 'roles.id')
 }
 
 const forTask = async (userId: string, taskId: string) => {
@@ -29,7 +54,7 @@ const forTask = async (userId: string, taskId: string) => {
   return forCause(userId, causeId);
 }
 
-const forCause = async (userId: string, causeId: string) => {
+const forCause = async (userId: string, causeId: string): Promise<permissions.role> => {
   /*
     SELECT
       r.name as role
@@ -48,10 +73,24 @@ const forCause = async (userId: string, causeId: string) => {
     .join('roles as r', 'r.id', 'roleId')
     .where('cru.userId', userId)
     .andWhere('cru.causeId', causeId)
-    .then(roles => roles[0].role);
+    .then(roles => roles.length ? roles[0].role : undefined);
+}
+
+const promotable = async (userId: string, causes: { id: string, roleId: string }[]) => {
+  return knexInstance
+    .select('u.name as name', 'u.email as email', 'u.id as userId', 'r.name as role', 'cru.id as id', 'cru.roleId', 'cru.causeId', 'cru.createdAt')
+    .from('causes_roles_users as cru')
+    .whereIn('causeId', causes.map(cause => cause.id))
+    .andWhereNot('userId', userId)
+    .join('roles as r', 'r.id', 'roleId')
+    .join('users as u', 'u.id', 'userId')
 }
 
 export default {
+  create: UserRoles.create,
+  update: UserRoles.update,
+  findOne: UserRoles.findOne,
+  promotable,
   getAll,
   forTask,
   forCause,

@@ -3,7 +3,7 @@ import { SubmissionError } from 'redux-form';
 
 import { callApi } from '../../util/api'
 import { AppState } from '../index';
-import { SET_SINGLE, Cause } from './index';
+import { SET_SINGLE, SET_ROLE, Cause } from './index';
 
 export const update = (cause: Cause) => (formValues: any) => {
   return async (dispatch: Dispatch<AppState>, getState: any) => {
@@ -12,6 +12,21 @@ export const update = (cause: Cause) => (formValues: any) => {
       dispatch({ type: SET_SINGLE, payload });
     } catch (e) {
       throw new SubmissionError({ _error: 'Error saving cause.' });
+    }
+  }
+}
+
+export const volunteer = (formValues: any) => {
+  return async (dispatch: Dispatch<AppState>, getState: any) => {
+    try {
+      const body = {
+        causeId: formValues.causeId,
+        roleId: '3e03adfd-81a0-430e-9475-d03d830f1129',
+      }
+      const payload = await callApi('roles', 'POST', body, getState);
+      dispatch({ type: SET_ROLE, payload });
+    } catch (e) {
+      throw new SubmissionError({ _error: 'Error volunteering for cause.' });
     }
   }
 }

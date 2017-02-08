@@ -4,22 +4,23 @@ import { hashHistory, Link } from 'react-router';
 import { causes } from '../../modules';
 import { RoleLabel } from '../ui';
 import { Table } from './Table';
+import { Column } from './Columns';
 
 interface Props {
   causes: causes.Cause[];
 }
 
 export class Causes extends React.Component<Props, {}>{
-  private columns = [
+  private columns: Column<causes.Cause>[] = [
     {
       key: 'causeId',
       name: 'Cause',
-      renderAs: (cause: causes.Cause) => (<Link to={`causes/${cause.id}`}>{cause.name}</Link>),
+      renderAs: cause => (<Link to={`causes/${cause.id}`}>{cause.name}</Link>),
     }, {
       key: 'role',
       name: 'Role',
-      renderAs: (cause: causes.Cause) => (<RoleLabel role={cause.role} />),
-      sortAs: (cause: causes.Cause) => {
+      renderAs: cause => (<RoleLabel role={cause.role} />),
+      sortAs: cause => {
         switch (cause.role) {
           case 'admin': return 3;
           case 'owner': return 2;

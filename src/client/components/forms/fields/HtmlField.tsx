@@ -106,14 +106,16 @@ export class HtmlField extends React.Component<Props, State>{
   }
 
   getOptions = () => {
-    const plugins = ['code', 'link', 'lists'];
-    const toolbar = 'bold italic | alignleft aligncenter alignright | bullist numlist | outdent indent | removeformat | link | code';
+    const plugins = ['code', 'link', 'lists', 'wordcount', 'autoresize'];
+    const toolbar = 'bold italic | bullist numlist | blockquote outdent indent | removeformat | link | code';
 
     const opts = {
       selector: '#' + this.state.id,
       toolbar,
       plugins,
       menubar: false,
+      autoresize_bottom_margin: 10,
+      autoresize_max_height: 500,
     };
 
     return opts;

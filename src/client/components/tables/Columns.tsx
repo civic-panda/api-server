@@ -1,41 +1,42 @@
-import * as React from 'react';
-import * as moment from 'moment';
-import { Link } from 'react-router';
+// import * as React from 'react';
+// import * as moment from 'moment';
+import * as BS from 'react-bootstrap';
+// import { Link } from 'react-router';
 
 export type Row = {
   id: string;
   [x: string]: any;
 }
 
-export type Column = {
+export type Column<T extends Row> = {
   key: string;
   name: string;
-  renderAs?(row: Row): any;
-  sortAs?(row: Row): any;
+  renderAs?(row: T): any;
+  sortAs?(row: T): any;
   className?: string;
-  hiddenAt?: ('xs' | 'sm' | 'md' | 'lg')[];
+  hiddenAt?: BS.Sizes[];
 }
 
-export type MakeColumn = (opts: Column, ...args: any[]) => Column;
+export type MakeColumn<T extends Row> = (opts: Column<T>, ...args: any[]) => Column<T>;
 
-const boolean: MakeColumn = (opts) => ({
-  sortAs: (row: Row) => row[opts.key] ? 1 : 0,
-  ...opts,
-})
+// const boolean: MakeColumn = (opts) => ({
+//   sortAs: (row: Row) => row[opts.key] ? 1 : 0,
+//   ...opts,
+// })
 
-const link: MakeColumn = (opts, getLink) => ({
-  renderAs: (row: Row) => (<Link to={getLink(row)}>{opts.renderAs(row)}</Link>),
-  ...opts,
-})
+// const link: MakeColumn = (opts, getLink) => ({
+//   renderAs: (row: Row) => (<Link to={getLink(row)}>{opts.renderAs(row)}</Link>),
+//   ...opts,
+// })
 
-const date: MakeColumn = (opts) => ({
-  renderAs: (row: Row) => moment(row[opts.key]).format('LL'),
-  sortAs: (row: Row) => moment(row[opts.key]).valueOf(),
-  ...opts,
-})
+// const date: MakeColumn = (opts) => ({
+//   renderAs: (row: Row) => moment(row[opts.key]).format('LL'),
+//   sortAs: (row: Row) => moment(row[opts.key]).valueOf(),
+//   ...opts,
+// })
 
-export const columns = {
-  boolean,
-  link,
-  date,
-}
+// export const columns = {
+//   boolean,
+//   link,
+//   date,
+// }

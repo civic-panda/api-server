@@ -68,9 +68,13 @@ class TasksPage extends React.Component<Props, State> {
 
 const mapStateToProps = (state: AppState) => {
   const causeList = causes.selectors.list(state);
+  console.log('causeList', causeList);
+  const unsubscribed = causes.selectors.unsubscribed(state);
+  console.log('unsubscribed', unsubscribed);
   const filteredCauseList = causeList.filter(cause => permissions.can(cause.role, 'create', 'task'));
+  console.log('filteredCauseList', filteredCauseList);
   return {
-    causes: causeList,
+    causes: [...causeList, ...unsubscribed],
     causesWithCreatePermission: filteredCauseList,
     tasks: tasks.selectors.list(state),
   };

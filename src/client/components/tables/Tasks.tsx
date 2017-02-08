@@ -13,31 +13,31 @@ interface Props {
 }
 
 export class Tasks extends React.Component<Props, {}>{
-  private columns: Column[] = [
+  private columns: Column<tasks.Task>[] = [
     {
       key: 'name',
       name: 'Task',
-      renderAs: (task: tasks.Task) => (<Link to={`tasks/${task.id}`}>{task.name}</Link>),
-      sortAs: (task: tasks.Task) => task.name,
+      renderAs: task => (<Link to={`tasks/${task.id}`}>{task.name}</Link>),
+      sortAs: task => task.name,
     }, {
       key: 'causeId',
       name: 'Cause',
-      renderAs: (task: tasks.Task) => {
+      renderAs: task => {
         const cause = this.props.causes.find(cause => cause.id === task.causeId);
         return (<Link to={`causes/${cause.id}`}>{cause.name}</Link>);
       },
-      sortAs: (task: tasks.Task) => {
+      sortAs: task => {
         const cause = this.props.causes.find(cause => cause.id === task.causeId);
         return cause.name;
       },
     }, {
       key: 'role',
       name: 'Role',
-      renderAs: (task: tasks.Task) => {
+      renderAs: task => {
         const cause = this.props.causes.find(cause => cause.id === task.causeId);
         return (<RoleLabel role={cause.role} />);
       },
-      sortAs: (task: tasks.Task) => {
+      sortAs: task => {
         const cause = this.props.causes.find(cause => cause.id === task.causeId);
         switch (cause.role) {
           case 'admin': return 3;
@@ -50,32 +50,33 @@ export class Tasks extends React.Component<Props, {}>{
     }, {
       key: 'startDate',
       name: 'Start Date',
-      renderAs: (task: tasks.Task) => moment(task.startDate).format('LL'),
-      sortAs: (task: tasks.Task) => moment(task.startDate).valueOf(),
+      renderAs: task => moment(task.startDate).format('LL'),
+      sortAs: task => moment(task.startDate).valueOf(),
       hiddenAt: ['xs', 'sm'],
     }, {
       key: 'endDate',
       name: 'End Date',
-      renderAs: (task: tasks.Task) => moment(task.endDate).format('LL'),
-      sortAs: (task: tasks.Task) => moment(task.endDate).valueOf(),
+      renderAs: task => moment(task.endDate).format('LL'),
+      sortAs: task => moment(task.endDate).valueOf(),
       hiddenAt: ['xs', 'sm'],
     }, {
       key: 'published',
       name: 'Published',
-      renderAs: (task: tasks.Task) => (<TaskPublishButton task={task} size={'small'} />),
-      sortAs: (task: tasks.Task) => task.published ? 1 : 0,
+      renderAs: task => (<TaskPublishButton task={task} size={'small'} />),
+      sortAs: task => task.published ? 1 : 0,
       hiddenAt: ['xs'],
     }, {
       key: 'actions',
       name: 'Actions',
-      renderAs: (task: tasks.Task) => (<TaskActionButton task={task} size={'small'} />),
+      renderAs: task => (<TaskActionButton task={task} size={'small'} />),
     }];
 
   public render() {
     const { tasks } = this.props;
     return (
       <Table
-        columns={this.columns} rows={tasks}
+        columns={this.columns}
+        rows={tasks}
         initialDirection={'descending'}
         initialSort={'startDate'}
       />

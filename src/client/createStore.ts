@@ -7,7 +7,7 @@ import * as logger from './redux/logger';
 import * as persist from './redux/persist';
 
 // Reducers
-import { AppState, auth, causes, storage, tasks, user } from './modules';
+import { AppState, auth, causes, storage, tasks, user, volunteers } from './modules';
 
 const middleware = applyMiddleware(thunk, logger.middleware);
 
@@ -18,6 +18,7 @@ const setupStore = () => {
     [storage.KEY]: storage.reducer,
     [tasks.KEY]: tasks.reducer,
     [user.KEY]: user.reducer,
+    [volunteers.KEY]: volunteers.reducer,
     form: formReducer,
   });
 

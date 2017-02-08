@@ -38,15 +38,20 @@ const initialState: Partial<State> = {
 export const KEY = 'causes';
 export const SET = `${storeKey}/${KEY}/SET`;
 export const SET_SINGLE = `${storeKey}/${KEY}/SET_SINGLE`;
+export const SET_ROLE = `${storeKey}/${KEY}/SET_ROLE`;
 
 const getState = (state: AppState) => state[KEY];
-const getList = createSelector(getState, (state): Cause[] => state.list);
-const find = (key: string, value: any) => createSelector(getList, list => list.find((cause: Cause) => cause[key] === value));
+const getAll = createSelector(getState, (state): Cause[] => state.list);
+const getList = createSelector(getState, (state): Cause[] => state.list.filter(cause => cause.role !== null));
+const getUnsubscribedList = createSelector(getState, (state): Cause[] => state.list.filter(cause => cause.role === null));
+const find = (key: string, value: any) => createSelector(getAll, list => list.find((cause: Cause) => cause[key] === value));
 
 export const selectors = {
   state: getState,
   list: getList,
+  unsubscribed: getUnsubscribedList,
   find,
+  getAll,
 }
 
 export const reducer = (state = initialState, action: any) => {
@@ -60,6 +65,16 @@ export const reducer = (state = initialState, action: any) => {
       return {
         ...state,
         list: [...front, action.payload, ...back]
+      }
+    }
+    case SET_ROLE: {
+      const { causeId, role } = action.payload;
+      return {
+        ...state,
+        list: state.list.map(cause => cause.id !== causeId ? cause : ({
+          ...cause,
+          role
+        }))
       }
     }
     case LOG_OUT:
