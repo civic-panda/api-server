@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as moment from 'moment';
-import { hashHistory } from 'react-router';
 
 import { causes, volunteers, permissions } from '../../modules';
 import { RoleButton } from '../ui';
@@ -10,9 +9,26 @@ import { Column } from './Columns';
 interface Props {
   volunteers: volunteers.Volunteer[];
   causes: causes.Cause[];
+  promote(...args: any[]): any;
 }
 
 export class Volunteers extends React.Component<Props, {}>{
+  private promote = (userId: string, causeId: string, currentRole: permissions.role) => {
+    let nextRole
+    switch(currentRole) {
+      case 'volunteer':
+        nextRole = 'organizer';
+        break;
+      case 'organizer':
+        nextRole = 'owner';
+        break;
+      default:
+       nextRole = undefined;
+       break;
+    }
+    this.props.promote({ userId, causeId, role: nextRole })
+  }
+
   private columns: Column<volunteers.Volunteer>[] = [
     {
       key: 'name',
@@ -35,10 +51,10 @@ export class Volunteers extends React.Component<Props, {}>{
         return (
           <RoleButton
             id={row.id}
-            canPromote={permissions.canThisPromoteToThat(cause.role, row.role)}
+            canPromote={permissions.isThisSeniorToThat(cause.role, row.role)}
             role={row.role}
             size={'small'}
-            promote={() => console.log('promote', row, cause)}
+            promote={() => this.promote(row.userId, row.causeId, row.role)}
           />
       )},
       sortAs: row => {
@@ -64,7 +80,6 @@ export class Volunteers extends React.Component<Props, {}>{
       <Table
         columns={this.columns}
         rows={volunteers}
-        onClick={(row) => hashHistory.push(`causes/${row.id}`)}
         initialDirection={'descending'}
         initialSort={'createdAt'}
       />

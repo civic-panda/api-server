@@ -1,8 +1,11 @@
+export * from './actions';
+
 import { createSelector } from 'reselect';
 
 import storeKey from '../../storeKey';
 import { AppState } from '../index';
 import { LOG_OUT } from '../auth';
+import * as lists from '../listHelpers';
 
 export interface Volunteer {
   id: string;
@@ -27,6 +30,7 @@ const initialState: Partial<State> = {
 
 export const KEY = 'volunteers';
 export const SET = `${storeKey}/${KEY}/SET`;
+export const PROMOTE = `${storeKey}/${KEY}/PROMOTE`;
 export const SET_SINGLE = `${storeKey}/${KEY}/SET_SINGLE`;
 export const CREATE = `${storeKey}/${KEY}/CREATE`;
 
@@ -41,7 +45,17 @@ export const selectors = {
 export const reducer = (state = initialState, action: any) => {
   switch (action.type) {
     case SET:
-      return { ...state, list: action.payload, loaded: true };
+      return {
+        ...state,
+        list: action.payload,
+        loaded: true,
+      };
+    case SET_SINGLE:
+    case PROMOTE:
+     return {
+       ...state,
+       list: lists.updateItem(state.list, action.payload),
+     }
     case LOG_OUT:
       return initialState;
     default:

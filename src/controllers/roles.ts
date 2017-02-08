@@ -26,9 +26,22 @@ const updateRole = async (id: string, userId: string, causeId: string, roleId: s
 }
 
 const createOrUpdateRole: express.RequestHandler = async (req, res, _next) => {
-  const { causeId, userId, roleId } = req.body;
+  const { causeId, userId } = req.body;
+
+  let roleId;
+  let newRole;
+  // Can pass either role name or id
+  if (req.body.roleId) {
+    roleId = req.body.roleId;
+    const newRoleModel = await roleModel.findOne({ id: roleId });
+    newRole = newRoleModel.name;
+  } else {
+    newRole = req.body.role;
+    const newRoleModel = await roleModel.findOne({ name: newRole });
+    roleId = newRoleModel.id;
+  }
+
   const userIdToUpdate = userId || req.user.userId;
-  const { name: newRole } = await roleModel.findOne({ id: roleId });
   const requesterRole = await userRolesModel.forCause(req.user.userId, causeId);
 
   const isPromotingSelf = userIdToUpdate === req.user.userId;

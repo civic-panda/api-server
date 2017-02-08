@@ -21,7 +21,7 @@ export const volunteer = (formValues: any) => {
     try {
       const body = {
         causeId: formValues.causeId,
-        roleId: '3e03adfd-81a0-430e-9475-d03d830f1129',
+        role: 'volunteer',
       }
       const payload = await callApi('roles', 'POST', body, getState);
       dispatch({ type: SET_ROLE, payload });

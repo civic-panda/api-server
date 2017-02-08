@@ -9,6 +9,7 @@ interface Props {
   causes: causes.Cause[];
   volunteers: volunteers.Volunteer[];
   createTask(): any;
+  promote(): any;
 }
 
 interface State {
@@ -32,6 +33,7 @@ class VolunteersPage extends React.Component<Props, State> {
         <Tables.Volunteers
           causes={causes}
           volunteers={volunteers}
+          promote={this.props.promote}
         />
       </BS.Col>
     );
@@ -46,6 +48,7 @@ const mapStateToProps = (state: AppState) => {
 };
 
 const mapDispatchToProps = ({
+  promote: volunteers.promote
 });
 
 export const Volunteers = connect(mapStateToProps, mapDispatchToProps)(VolunteersPage)

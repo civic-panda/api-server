@@ -23,7 +23,7 @@ class DashboardComponent extends React.Component<Props, {}>{
     return (
       <BS.Col xs={12}>
         <BS.PageHeader>
-          Dashboard
+          {this.props.user.name}'s Dashboard
         </BS.PageHeader>
         <BS.Panel>
           <Link to={'/causes'}><h2>Causes</h2></Link>

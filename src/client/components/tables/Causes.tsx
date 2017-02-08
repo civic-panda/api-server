@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { hashHistory, Link } from 'react-router';
+import { Link } from 'react-router';
 
 import { causes } from '../../modules';
 import { RoleLabel } from '../ui';
@@ -37,7 +37,6 @@ export class Causes extends React.Component<Props, {}>{
       <Table
         columns={this.columns}
         rows={causes}
-        onClick={(row) => hashHistory.push(`causes/${row.id}`)}
         initialDirection={'descending'}
         initialSort={'role'}
       />
