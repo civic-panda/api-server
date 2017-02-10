@@ -4,6 +4,7 @@ type Config = {
   host: string;
   port: string;
   password: string;
+  dbUrl: string;
 }
 
 const local: Config = {
@@ -12,6 +13,7 @@ const local: Config = {
   host: undefined,
   port: undefined,
   password: undefined,
+  dbUrl: undefined,
 }
 
 const development: Config = {
@@ -20,6 +22,7 @@ const development: Config = {
   port: process.env.RDS_PORT,
   user: process.env.RDS_USERNAME,
   password: process.env.RDS_PASSWORD,
+  dbUrl: process.env.DATABASE_URL,
 }
 
 const production: Config = {
@@ -28,6 +31,7 @@ const production: Config = {
   port: process.env.RDS_PORT,
   user: process.env.RDS_USERNAME,
   password: process.env.RDS_PASSWORD,
+  dbUrl: process.env.DATABASE_URL,
 }
 
 const config = (() => {

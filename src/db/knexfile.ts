@@ -21,13 +21,7 @@ export const local = {
 
 export const development = {
   client: 'postgresql',
-  connection: {
-    database: 'actonthis',
-    host: config.host,
-    port: config.port,
-    user: config.user,
-    password: config.password,
-  },
+  connection: `postgres://${config.user}:${config.password}@${config.host}/actonthis?sslmode=verify-full&sslrootcert=config/rds-combined-ca-bundle.pem`,
   pool: {
     min: 2,
     max: 10
@@ -40,13 +34,7 @@ export const development = {
 
 export const production = {
   client: 'postgresql',
-  connection: {
-    database: 'actonthis',
-    host: config.host,
-    port: config.port,
-    user: config.user,
-    password: config.password,
-  },
+  connection: `postgres://${config.user}:${config.password}@${config.host}/actonthis?sslmode=verify-full&sslrootcert=config/rds-combined-ca-bundle.pem`,
   pool: {
     min: 2,
     max: 10
