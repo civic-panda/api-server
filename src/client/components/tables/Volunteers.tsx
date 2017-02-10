@@ -26,7 +26,7 @@ export class Volunteers extends React.Component<Props, {}>{
        nextRole = undefined;
        break;
     }
-    this.props.promote({ userId, causeId, role: nextRole })
+    this.props.promote({ userId, causeId, roleName: nextRole })
   }
 
   private columns: Column<volunteers.Volunteer>[] = [
@@ -44,21 +44,21 @@ export class Volunteers extends React.Component<Props, {}>{
       sortAs: row => this.props.causes.find(cause => cause.id === row.causeId).name,
       hiddenAt: ['xs'],
     }, {
-      key: 'role',
+      key: 'roleName',
       name: 'Role',
       renderAs: row => {
         const cause = this.props.causes.find(cause => cause.id === row.causeId);
         return (
           <RoleButton
             id={row.id}
-            canPromote={permissions.isThisSeniorToThat(cause.role, row.role)}
-            role={row.role}
+            canPromote={permissions.isThisSeniorToThat(cause.roleName, row.roleName)}
+            roleName={row.roleName}
             size={'small'}
-            promote={() => this.promote(row.userId, row.causeId, row.role)}
+            promote={() => this.promote(row.userId, row.causeId, row.roleName)}
           />
       )},
       sortAs: row => {
-        switch (row.role) {
+        switch (row.roleName) {
           case 'admin': return 3;
           case 'owner': return 2;
           case 'organizer': return 1;

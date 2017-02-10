@@ -10,7 +10,7 @@ const UserRoles = new Table<db.causes_roles_users, ReturnedColumns>('causes_role
 
 const getAll = (userId: string) => {
   return knexInstance
-    .select('c.*', 'r.roleName as role')
+    .select('c.*', 'r.roleName')
     .from('causes as c')
     .joinRaw(`
       LEFT JOIN (
@@ -30,47 +30,92 @@ const forTask = async (userId: string, taskId: string) => {
 
 const forCause = async (userId: string, causeId: string): Promise<permissions.role> => {
   return knexInstance
-    .select('cru.roleName as role')
+    .select('cru.roleName')
     .from('causes_roles_users as cru')
     .join('causes as c', 'c.id', 'causeId')
     .where('cru.userId', userId)
     .andWhere('cru.causeId', causeId)
-    .then(roles => roles.length ? roles[0].role : undefined);
+    .then(roles => roles.length ? roles[0].roleName : undefined);
 }
 
 const promotable = async (userId: string, causes: { id: string }[]) => {
   return knexInstance
-    .select('u.name as name', 'u.email as email', 'u.id as userId', 'cru.id as id', 'cru.roleName as role', 'cru.causeId', 'cru.createdAt')
+    .select('u.name as name', 'u.email as email', 'u.id as userId', 'cru.id as id', 'cru.roleName', 'cru.causeId', 'cru.createdAt')
     .from('causes_roles_users as cru')
     .whereIn('causeId', causes.map(cause => cause.id))
     .andWhereNot('userId', userId)
     .join('users as u', 'u.id', 'userId')
 }
 
+
+// TODO Move create and update logic to DB triggers
 const create = async (userId: string, causeId: string, roleName: string) => {
   const cause = await Cause.findOne({ id: causeId });
   if (!cause) throw 'Cause does not exist';
-  // Check if cause has a parent
-  if (cause.parent) {
-    const parentRole = await UserRoles.findOne({ userId, causeId: cause.parent });
-    // Check if parent exists
-    if (parentRole) {
-      // Check if parent role if more senior
-      if (permissions.isThisSeniorToThat(parentRole.roleName as permissions.role, roleName as permissions.role)) {
-        // Create elevated child role
-        return UserRoles.create({ userId, causeId, roleName: parentRole.roleName });
-      }
-    }
-    // Volunteer to parent if not already
-    UserRoles.create({ userId, causeId: cause.parent, roleName: 'volunteer' });
+
+  const promotions: Partial<db.causes_roles_users>[] = [];
+
+  // If no parent cause
+  if (!cause.parent) {
+    // Create requested child role
+    const newPromotion = UserRoles.create({ userId, causeId, roleName });
+    promotions.push(newPromotion);
+    return promotions;
   }
-  // Create requested child role
-  return UserRoles.create({ userId, causeId, roleName });
+
+  const parentRole = await UserRoles.findOne({ userId, causeId: cause.parent });
+  // If user doesn't have a role in the parent cause
+  if (!parentRole) {
+    // Create volunteer role in parent
+    const newParentPromotion = await UserRoles.create({ userId, causeId: cause.parent, roleName: 'volunteer' });
+    promotions.push(newParentPromotion);
+    // Create requested child role
+    const newPromotion = UserRoles.create({ userId, causeId, roleName });
+    promotions.push(newPromotion);
+    return promotions;
+  }
+
+  // Check if parent role if more senior
+  if (permissions.isThisSeniorToThat(parentRole.roleName as permissions.role, roleName as permissions.role)) {
+    // Create elevated child role
+    const newPromotion = UserRoles.create({ userId, causeId, roleName: parentRole.roleName });
+    promotions.push(newPromotion);
+    return promotions;
+  } else {
+    // Create requested child role
+    const newPromotion = UserRoles.create({ userId, causeId, roleName });
+    promotions.push(newPromotion);
+    return promotions;
+  }
+}
+
+const update = async (userId: string, causeId: string, roleName: permissions.role) => {
+  const childrenCauses = await knexInstance
+    .select('*')
+    .from('causes as c')
+    .leftJoin('causes_roles_users as cru', 'cru.causeId', 'c.id')
+    .where('c.parent', causeId)
+    .andWhere('cru.userId', userId);
+
+  const promotions: Partial<db.causes_roles_users>[] = [];
+
+  if (childrenCauses) {
+    await Promise.all(childrenCauses.map(async (childCause: db.causes_roles_users) => {
+      if (permissions.isThisSeniorToThat(roleName, childCause.roleName as permissions.role)) {
+        const newChild = await UserRoles.update({ userId: childCause.userId, causeId: childCause.causeId }, { roleName });
+        promotions.push(newChild);
+      }
+    }));
+  }
+
+  const newParent = await UserRoles.update({ userId, causeId }, { roleName });
+  promotions.push(newParent);
+  return promotions;
 }
 
 export default {
   create,
-  update: UserRoles.update,
+  update,
   findOne: UserRoles.findOne,
   promotable,
   getAll,

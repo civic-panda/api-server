@@ -31,15 +31,15 @@ export class Tasks extends React.Component<Props, {}>{
         return cause.name;
       },
     }, {
-      key: 'role',
+      key: 'roleName',
       name: 'Role',
       renderAs: task => {
         const cause = this.props.causes.find(cause => cause.id === task.causeId);
-        return (<RoleLabel role={cause.role} />);
+        return (<RoleLabel roleName={cause.roleName} />);
       },
       sortAs: task => {
         const cause = this.props.causes.find(cause => cause.id === task.causeId);
-        switch (cause.role) {
+        switch (cause.roleName) {
           case 'admin': return 3;
           case 'owner': return 2;
           case 'organizer': return 1;

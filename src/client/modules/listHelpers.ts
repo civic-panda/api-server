@@ -6,11 +6,20 @@ type hasId = {
 export const updateItem = <T extends hasId>(list: T[], update: Partial<T>): T[] => {
   const index = list.findIndex(item => item.id === update.id as string);
 
+  if (index === -1) {
+    console.warn('could not find list item', list, update);
+    return list;
+  }
+
   return [
     ...list.slice(0, index),
     Object.assign({}, list[index], update),
     ...list.slice(index + 1),
   ]
+}
+
+export const updateItems = <T extends hasId>(list: T[], updates: Partial<T>[]): T[] => {
+  return updates.reduce((prev, update) => updateItem(prev, update), list);
 }
 
 export const addItem = <T extends hasId>(list: T[], item: T): T[] => {

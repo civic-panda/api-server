@@ -11,40 +11,39 @@ const getRoles: express.RequestHandler = async (_req, res, _next) => {
 }
 
 const createRole = async (userId: string, causeId: string, roleName: string) => {
-  const newRoleModel = await userRolesModel.create(userId, causeId, roleName);
+  const newRoleModels = await userRolesModel.create(userId, causeId, roleName);
 
-  return { status: 201, body: newRoleModel }
+  return { status: 201, body: newRoleModels }
 }
 
-const updateRole = async (id: string, userId: string, causeId: string, roleName: string) => {
+const updateRole = async (userId: string, causeId: string, roleName: permissions.role) => {
   // TODO handle privaledges for demotions
-  const newRoleModel = await userRolesModel.update({ id }, { userId, causeId, roleName });
+  const newRoleModels = await userRolesModel.update(userId, causeId, roleName);
 
-  return { status: 200, body: newRoleModel }
+  return { status: 200, body: newRoleModels }
 }
 
 const createOrUpdateRole: express.RequestHandler = async (req, res, _next) => {
-  const { causeId, userId } = req.body;
+  const { causeId, userId, roleName } = req.body;
 
-  const newRole = req.body.role;
   const userIdToUpdate = userId || req.user.userId;
   const requesterRole = await userRolesModel.forCause(req.user.userId, causeId);
-
   const isPromotingSelf = userIdToUpdate === req.user.userId;
-  const isPromotingSelfToVolunteer = isPromotingSelf && newRole === 'volunteer';
-  const hasPermissionToPromote = permissions.canThisPromoteToThat(requesterRole, newRole as permissions.role);
-
+  const isPromotingSelfToVolunteer = isPromotingSelf && roleName === 'volunteer';
+  const hasPermissionToPromote = permissions.canThisPromoteToThat(requesterRole, roleName as permissions.role);
+  console.log(causeId, userId, roleName);
+  console.log('isPromotingSelfToVolunteer || hasPermissionToPromote', isPromotingSelfToVolunteer, hasPermissionToPromote)
   if (!(isPromotingSelfToVolunteer || hasPermissionToPromote)) {
     throw { status: 403, message: 'you don\'t have permission to create that role' };
   }
 
-  const existingRoleModel = await userRolesModel.findOne({ userId, causeId });
+  const existingRoleModel = await userRolesModel.findOne({ userId: userIdToUpdate, causeId });
   let response;
 
   if (existingRoleModel) {
-    response = await updateRole(existingRoleModel.id, userIdToUpdate, causeId, newRole);
+    response = await updateRole(userIdToUpdate, causeId, roleName);
   } else {
-    response = await createRole(userIdToUpdate, causeId, newRole);
+    response = await createRole(userIdToUpdate, causeId, roleName);
   }
 
   res.status(response.status).json(response.body);

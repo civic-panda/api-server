@@ -30,11 +30,11 @@ export class Causes extends React.Component<Props, {}>{
       name: 'Cause',
       renderAs: cause => (<Link to={`causes/${cause.id}`}>{cause.name}</Link>),
     }, {
-      key: 'role',
+      key: 'roleName',
       name: 'Role',
-      renderAs: cause => (<RoleLabel role={cause.role} />),
+      renderAs: cause => (<RoleLabel roleName={cause.roleName} />),
       sortAs: cause => {
-        switch (cause.role) {
+        switch (cause.roleName) {
           case 'admin': return 3;
           case 'owner': return 2;
           case 'organizer': return 1;
@@ -51,7 +51,7 @@ export class Causes extends React.Component<Props, {}>{
         columns={this.columns}
         rows={causes}
         initialDirection={'descending'}
-        initialSort={'role'}
+        initialSort={'roleName'}
       />
     );
   }

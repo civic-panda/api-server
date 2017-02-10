@@ -3,7 +3,7 @@ import { SubmissionError } from 'redux-form';
 
 import { callApi } from '../../util/api'
 import { AppState } from '../index';
-import { SET_SINGLE, SET_ROLE, Cause } from './index';
+import { SET_SINGLE, SET_MULTIPLE, Cause } from './index';
 
 export const update = (cause: Cause) => (formValues: any) => {
   return async (dispatch: Dispatch<AppState>, getState: any) => {
@@ -21,10 +21,10 @@ export const volunteer = (formValues: any) => {
     try {
       const body = {
         causeId: formValues.causeId,
-        role: 'volunteer',
+        roleName: 'volunteer',
       }
       const payload = await callApi('roles', 'POST', body, getState);
-      dispatch({ type: SET_ROLE, payload });
+      dispatch({ type: SET_MULTIPLE, payload });
     } catch (e) {
       throw new SubmissionError({ _error: 'Error volunteering for cause.' });
     }

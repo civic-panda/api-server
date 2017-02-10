@@ -76,7 +76,7 @@ const mapStateToProps = (state: AppState) => {
   console.log('causeList', causeList);
   const unsubscribed = causes.selectors.unsubscribed(state);
   console.log('unsubscribed', unsubscribed);
-  const filteredCauseList = causeList.filter(cause => permissions.can(cause.role, 'create', 'task'));
+  const filteredCauseList = causeList.filter(cause => permissions.can(cause.roleName, 'create', 'task'));
   console.log('filteredCauseList', filteredCauseList);
   return {
     causes: [...causeList, ...unsubscribed],

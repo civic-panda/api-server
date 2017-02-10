@@ -45,7 +45,7 @@ const mapStateToProps = (state: AppState, ownProps: Partial<Props>) => {
   return {
     task,
     cause,
-    canEdit: permissions.can(cause.role, 'edit', 'task'),
+    canEdit: permissions.can(cause.roleName, 'edit', 'task'),
   };
 };
 

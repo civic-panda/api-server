@@ -35,8 +35,8 @@ const ActionButtonComponent = (props: Props) => {
 const mapStateToProps = (state: AppState, ownProps: Partial<Props>) => {
   const cause = causes.selectors.find('id', ownProps.task.causeId)(state);
   return {
-    canEdit: permissions.can(cause.role, 'edit', 'task'),
-    canDelete: permissions.can(cause.role, 'delete', 'task'),
+    canEdit: permissions.can(cause.roleName, 'edit', 'task'),
+    canDelete: permissions.can(cause.roleName, 'delete', 'task'),
   }
 };
 

@@ -44,11 +44,23 @@ export class Table extends React.Component<Props, State>{
 
   private getHiddenClasses = (column: Column<any>) => column.hiddenAt ? column.hiddenAt.map(size => `hidden-${size}`).join(' ') : ''
 
+  private sortFn = (sortAs: (r: Row) => any = defaultSort) =>(a: Row, b: Row) => {
+    const first = this.state.sortDirection === 'ascending' ? a : b;
+    const last = this.state.sortDirection === 'ascending' ? b : a;
+
+    if (sortAs(first) < sortAs(last)) {
+      return -1;
+    } else if (sortAs(first) > sortAs(last)) {
+      return 1;
+    } else {
+      return a.id > b.id ? 0 : 1;
+    }
+  }
+
   public render() {
     const { columns, rows, onClick } = this.props;
     const { sortBy, sortDirection } = this.state;
-    const sortAs = columns[sortBy].sortAs || defaultSort;
-    const sortFn = (a: Row, b: Row) => sortDirection === 'ascending' ? (sortAs(a) < sortAs(b) ? -1 : 1) : (sortAs(a) > sortAs(b) ? -1 : 1);
+    const sortFn = this.sortFn(columns[sortBy].sortAs);
 
     return (
       <BS.Table style={{ position: 'relative' }} bordered striped hover>

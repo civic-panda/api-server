@@ -6,7 +6,7 @@ import { colorMap } from './RoleLabel';
 
 interface Props {
   id: string;
-  role: role;
+  roleName: role;
   promote?(): void;
   size?: BS.Sizes;
   canPromote?: boolean;
@@ -15,8 +15,8 @@ interface Props {
 export const RoleButton = (props: Props) => (
   <BS.DropdownButton
     id={`promote-button-${props.id}`}
-    title={props.role}
-    bsStyle={colorMap[props.role]}
+    title={props.roleName}
+    bsStyle={colorMap[props.roleName]}
     bsSize={props.size}
     disabled={!props.canPromote}
     pullRight

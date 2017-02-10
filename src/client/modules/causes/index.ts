@@ -25,7 +25,7 @@ export interface Cause {
   published: boolean;
   createdAt: string;
   updatedAt: string;
-  role: 'admin' | 'owner' | 'organizer' | 'volunteer';
+  roleName: 'admin' | 'owner' | 'organizer' | 'volunteer';
 }
 
 export interface State {
@@ -41,12 +41,12 @@ const initialState: Partial<State> = {
 export const KEY = 'causes';
 export const SET = `${storeKey}/${KEY}/SET`;
 export const SET_SINGLE = `${storeKey}/${KEY}/SET_SINGLE`;
-export const SET_ROLE = `${storeKey}/${KEY}/SET_ROLE`;
+export const SET_MULTIPLE = `${storeKey}/${KEY}/SET_ROLE`;
 
 const getState = (state: AppState) => state[KEY];
 const getAll = createSelector(getState, (state): Cause[] => state.list);
-const getList = createSelector(getState, (state): Cause[] => state.list.filter(cause => cause.role !== null));
-const getUnsubscribedList = createSelector(getState, (state): Cause[] => state.list.filter(cause => cause.role === null));
+const getList = createSelector(getState, (state): Cause[] => state.list.filter(cause => cause.roleName !== null));
+const getUnsubscribedList = createSelector(getState, (state): Cause[] => state.list.filter(cause => cause.roleName === null));
 const find = (key: string, value: any) => createSelector(getAll, list => list.find((cause: Cause) => cause[key] === value));
 const getGroupedList = createSelector(getList, list => {
   const grouped = _.groupBy(list, (cause) => cause.parent || 'parents');
@@ -72,11 +72,11 @@ export const reducer = (state = initialState, action: any) => {
         ...state,
         list: lists.addOrUpdateItem(state.list, action.payload),
       }
-    case SET_ROLE: {
-      const { causeId, role } = action.payload;
+    case SET_MULTIPLE: {
+      const updates = action.payload.map((update: any) => ({...update, id: update.causeId }))
       return {
         ...state,
-        list: lists.updateItem(state.list, { id: causeId, role }),
+        list: lists.updateItems(state.list, updates),
       }
     }
     case LOG_OUT:

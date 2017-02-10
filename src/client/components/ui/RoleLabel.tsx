@@ -4,7 +4,7 @@ import * as BS from 'react-bootstrap';
 import { permissions } from '../../modules';
 
 interface Props extends BS.LabelProps {
-  role: permissions.role,
+  roleName: permissions.role,
   label?: string,
 }
 
@@ -15,8 +15,8 @@ export const colorMap = {
   volunteer: 'default',
 }
 
-export const RoleLabel = ({ label, role, ...otherProps }: Props) => (
-  <BS.Label bsStyle={colorMap[role]} {...otherProps}>
-    {label || role}
+export const RoleLabel = ({ label, roleName, ...otherProps }: Props) => (
+  <BS.Label bsStyle={colorMap[roleName]} {...otherProps}>
+    {label || roleName}
   </BS.Label>
 );

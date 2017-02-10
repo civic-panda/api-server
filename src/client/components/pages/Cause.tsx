@@ -52,7 +52,7 @@ const mapStateToProps = (state: AppState, ownProps: Partial<Props>) => {
   const cause = causes.selectors.find('id', ownProps.params.causeId)(state);
   return {
     cause,
-    canEdit: permissions.can(cause.role, 'edit', 'cause'),
+    canEdit: permissions.can(cause.roleName, 'edit', 'cause'),
   }
 }
 

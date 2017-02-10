@@ -47,7 +47,7 @@ const PublishButtonComponent = (props: Props) => {
 const mapStateToProps = (state: AppState, ownProps: Partial<Props>) => {
   const cause = causes.selectors.find('id', ownProps.task.causeId)(state);
   return {
-    canPublish: permissions.can(cause.role, 'publish', 'task'),
+    canPublish: permissions.can(cause.roleName, 'publish', 'task'),
   }
 };
 

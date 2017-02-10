@@ -3,13 +3,12 @@ import * as express from 'express';
 import * as permissions from '../util/permissions';
 import userModel from '../models/User';
 import userRolesModel from '../models/UserRoles';
-import roleModel from '../models/Roles';
 import taskModel from '../models/Task';
 import { wrapRequestHandler, wrapRequestParamHandler } from './catchAsyncErrors';
 
 const getVolunteers = async (userId: string) => {
   const userCauses = await userRolesModel.getAll(userId);
-  const withPermissions = userCauses.filter((cause: any) => permissions.can(cause.role, 'promote', 'cause'));
+  const withPermissions = userCauses.filter((cause: any) => permissions.can(cause.roleName, 'promote', 'cause'));
   return await userRolesModel.promotable(userId, withPermissions);
 }
 
@@ -41,10 +40,9 @@ const getUserParam: express.RequestParamHandler = async (req, _res, next, userId
 
 const getUser: express.RequestHandler = async (req, res, _next) => {
   const causes = await userRolesModel.getAll(req.params.user.id);
-  const tasks = await taskModel.findIn('causeId', causes.filter((cause: any) => cause.role).map((cause: any) => cause.id));
-  const roles = await roleModel.getAll();
+  const tasks = await taskModel.findIn('causeId', causes.filter((cause: any) => cause.roleName).map((cause: any) => cause.id));
   const volunteers = await getVolunteers(req.user.userId);
-  res.json({ user: req.params.user, causes, tasks, roles, volunteers });
+  res.json({ user: req.params.user, causes, tasks, volunteers });
 }
 
 const updateUser: express.RequestHandler = async (req, res, _next) => {

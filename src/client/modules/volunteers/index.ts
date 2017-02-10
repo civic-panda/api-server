@@ -12,7 +12,7 @@ export interface Volunteer {
   userId: string;
   name: string;
   email: string;
-  role: 'admin' | 'owner' | 'organizer' | 'volunteer';
+  roleName: 'admin' | 'owner' | 'organizer' | 'volunteer';
   causeId: string;
   createdAt: string;
 }
@@ -29,7 +29,7 @@ const initialState: Partial<State> = {
 
 export const KEY = 'volunteers';
 export const SET = `${storeKey}/${KEY}/SET`;
-export const PROMOTE = `${storeKey}/${KEY}/PROMOTE`;
+export const SET_MULTIPLE = `${storeKey}/${KEY}/PROMOTE`;
 export const SET_SINGLE = `${storeKey}/${KEY}/SET_SINGLE`;
 export const CREATE = `${storeKey}/${KEY}/CREATE`;
 
@@ -50,10 +50,10 @@ export const reducer = (state = initialState, action: any) => {
         loaded: true,
       };
     case SET_SINGLE:
-    case PROMOTE:
+    case SET_MULTIPLE:
      return {
        ...state,
-       list: lists.updateItem(state.list, action.payload),
+       list: lists.updateItems(state.list, action.payload),
      }
     case LOG_OUT:
       return initialState;

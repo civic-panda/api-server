@@ -60,6 +60,7 @@ const isThisSeniorToThat = (thisRole: role, thatRole: role): boolean => {
 }
 
 const canThisPromoteToThat = (thisRole: role, thatRole: role): boolean => {
+  console.log('canThisPromoteToThat', thisRole, thatRole);
   const areEquivalent = thisRole === thatRole;
   return isThisSeniorToThat(thisRole, thatRole) || areEquivalent;
 }
