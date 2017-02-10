@@ -1,8 +1,13 @@
+import config from '../config';
+
 export const local = {
   client: 'postgresql',
   connection: {
     database: 'actonthis',
-    user: 'mattcasey'
+    host: config.host,
+    port: config.port,
+    user: config.user,
+    password: config.password,
   },
   pool: {
     min: 2,
@@ -18,10 +23,10 @@ export const development = {
   client: 'postgresql',
   connection: {
     database: 'actonthis',
-    host: process.env.RDS_HOSTNAME,
-    port: process.env.RDS_PORT,
-    user: process.env.RDS_USERNAME,
-    password: process.env.RDS_PASSWORD,
+    host: config.host,
+    port: config.port,
+    user: config.user,
+    password: config.password,
   },
   pool: {
     min: 2,
@@ -37,10 +42,10 @@ export const production = {
   client: 'postgresql',
   connection: {
     database: 'actonthis',
-    host: process.env.RDS_HOSTNAME,
-    port: process.env.RDS_PORT,
-    user: process.env.RDS_USERNAME,
-    password: process.env.RDS_PASSWORD,
+    host: config.host,
+    port: config.port,
+    user: config.user,
+    password: config.password,
   },
   pool: {
     min: 2,
