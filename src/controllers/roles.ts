@@ -10,37 +10,23 @@ const getRoles: express.RequestHandler = async (_req, res, _next) => {
   res.json(roles);
 }
 
-const createRole = async (userId: string, causeId: string, roleId: string) => {
-  const newRoleModel = await userRolesModel.create({ userId, causeId, roleId });
-  const { name: role } = await roleModel.findOne({ id: roleId });
+const createRole = async (userId: string, causeId: string, roleName: string) => {
+  const newRoleModel = await userRolesModel.create(userId, causeId, roleName);
 
-  return { status: 201, body: { ...newRoleModel, role } }
+  return { status: 201, body: newRoleModel }
 }
 
-const updateRole = async (id: string, userId: string, causeId: string, roleId: string) => {
+const updateRole = async (id: string, userId: string, causeId: string, roleName: string) => {
   // TODO handle privaledges for demotions
-  const newRoleModel = await userRolesModel.update({ id }, { userId, causeId, roleId });
-  const { name: role } = await roleModel.findOne({ id: roleId });
+  const newRoleModel = await userRolesModel.update({ id }, { userId, causeId, roleName });
 
-  return { status: 200, body: { ...newRoleModel, role } }
+  return { status: 200, body: newRoleModel }
 }
 
 const createOrUpdateRole: express.RequestHandler = async (req, res, _next) => {
   const { causeId, userId } = req.body;
 
-  let roleId;
-  let newRole;
-  // Can pass either role name or id
-  if (req.body.roleId) {
-    roleId = req.body.roleId;
-    const newRoleModel = await roleModel.findOne({ id: roleId });
-    newRole = newRoleModel.name;
-  } else {
-    newRole = req.body.role;
-    const newRoleModel = await roleModel.findOne({ name: newRole });
-    roleId = newRoleModel.id;
-  }
-
+  const newRole = req.body.role;
   const userIdToUpdate = userId || req.user.userId;
   const requesterRole = await userRolesModel.forCause(req.user.userId, causeId);
 
@@ -56,16 +42,16 @@ const createOrUpdateRole: express.RequestHandler = async (req, res, _next) => {
   let response;
 
   if (existingRoleModel) {
-    response = await updateRole(existingRoleModel.id, userIdToUpdate, causeId, roleId);
+    response = await updateRole(existingRoleModel.id, userIdToUpdate, causeId, newRole);
   } else {
-    response = await createRole(userIdToUpdate, causeId, roleId);
+    response = await createRole(userIdToUpdate, causeId, newRole);
   }
 
   res.status(response.status).json(response.body);
 }
 
-const getRoleParam: express.RequestParamHandler = async (req, _res, next, roleId) => {
-  const role = await roleModel.findOne({ id: roleId });
+const getRoleParam: express.RequestParamHandler = async (req, _res, next, roleName) => {
+  const role = await roleModel.findOne({ name: roleName });
   if (!role) throw { status: 404, message: 'that role does not exist' };
   req.params.role = role;
   return next();
@@ -76,7 +62,7 @@ const router = express.Router();
 router
   .get('/', wrapRequestHandler(getRoles))
   .post('/', wrapRequestHandler(createOrUpdateRole))
-  .param('roleId', wrapRequestParamHandler(getRoleParam))
-  // .put('/:roleId', wrapRequestHandler(updateRole));
+  .param('roleName', wrapRequestParamHandler(getRoleParam))
+  // .put('/:roleName', wrapRequestHandler(updateRole));
 
 export default router;

@@ -13,7 +13,6 @@ export interface Volunteer {
   name: string;
   email: string;
   role: 'admin' | 'owner' | 'organizer' | 'volunteer';
-  roleId: string;
   causeId: string;
   createdAt: string;
 }

@@ -5,10 +5,10 @@ import { callApi } from '../../util/api'
 import { AppState } from '../index';
 import { PROMOTE } from './index';
 
-export const promote = ({ userId, causeId, roleId, role }:{ userId: string, causeId: string, roleId?: string, role?: string }) => {
+export const promote = ({ userId, causeId, role }:{ userId: string, causeId: string, role: string }) => {
   return async (dispatch: Dispatch<AppState>, getState: any) => {
     try {
-      const body = { userId, causeId, roleId, role };
+      const body = { userId, causeId, role };
       const payload = await callApi('roles', 'POST', body, getState);
       dispatch({ type: PROMOTE, payload });
     } catch (e) {

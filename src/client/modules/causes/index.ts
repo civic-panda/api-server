@@ -50,7 +50,8 @@ const getUnsubscribedList = createSelector(getState, (state): Cause[] => state.l
 const find = (key: string, value: any) => createSelector(getAll, list => list.find((cause: Cause) => cause[key] === value));
 const getGroupedList = createSelector(getList, list => {
   const grouped = _.groupBy(list, (cause) => cause.parent || 'parents');
-  return grouped['parents'].map((cause): Cause => ({ ...cause, children: grouped[cause.id] }));
+  console.log('grouped', grouped, list)
+  return grouped['parents'] ? grouped['parents'].map((cause): Cause => ({ ...cause, children: grouped[cause.id] })) : [];
 })
 
 export const selectors = {

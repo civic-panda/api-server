@@ -1,6 +1,6 @@
 
 /**
- * AUTO-GENERATED FILE @ 2017-02-09 17:37:11 - DO NOT EDIT!
+ * AUTO-GENERATED FILE @ 2017-02-09 21:04:55 - DO NOT EDIT!
  *
  * This file was generated with schemats node package:
  * $ schemats generate -c postgres://username:password@localhost/actonthis -o src/db/schema.ts
@@ -140,20 +140,20 @@ export interface migrations_lock {
 export namespace causes_roles_usersFields {
     export type id = string;
     export type causeId = string;
-    export type roleId = string;
     export type userId = string;
     export type createdAt = Date;
     export type updatedAt = Date;
+    export type roleName = string;
 
 }
 
 export interface causes_roles_users {
     id: causes_roles_usersFields.id;
     causeId: causes_roles_usersFields.causeId;
-    roleId: causes_roles_usersFields.roleId;
     userId: causes_roles_usersFields.userId;
     createdAt: causes_roles_usersFields.createdAt;
     updatedAt: causes_roles_usersFields.updatedAt;
+    roleName: causes_roles_usersFields.roleName;
 
 }
 

@@ -1,13 +1,13 @@
 import db from '../db/schema';
 import { Table, knexInstance } from '../db/knex';
 
-type ReturnedColumns = 'id' | 'name';
-const returnedColumns: ReturnedColumns[] = ['id', 'name']
+type ReturnedColumns = 'name';
+const returnedColumns: ReturnedColumns[] = ['name']
 const Role = new Table<db.tasks, ReturnedColumns>('roles', returnedColumns);
 
 const getAll = async () => {
   return knexInstance
-    .select('id', 'name')
+    .select('name')
     .from('roles')
 }
 
