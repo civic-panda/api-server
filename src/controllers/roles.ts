@@ -31,8 +31,7 @@ const createOrUpdateRole: express.RequestHandler = async (req, res, _next) => {
   const isPromotingSelf = userIdToUpdate === req.user.userId;
   const isPromotingSelfToVolunteer = isPromotingSelf && roleName === 'volunteer';
   const hasPermissionToPromote = permissions.canThisPromoteToThat(requesterRole, roleName as permissions.role);
-  console.log(causeId, userId, roleName);
-  console.log('isPromotingSelfToVolunteer || hasPermissionToPromote', isPromotingSelfToVolunteer, hasPermissionToPromote)
+
   if (!(isPromotingSelfToVolunteer || hasPermissionToPromote)) {
     throw { status: 403, message: 'you don\'t have permission to create that role' };
   }

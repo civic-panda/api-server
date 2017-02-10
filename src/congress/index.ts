@@ -118,7 +118,6 @@ export const getCommitteeMembers = (committeeId: string, subcommitteeId: string 
   committee = committees.find(committee => committee.thomasId === committeeId);
 
   if (!committee) {
-    console.log(committeeId, subcommitteeId);
     throw 'committee not found';
   }
 

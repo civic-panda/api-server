@@ -3,8 +3,6 @@ import * as crypto from 'crypto';
 
 import config from '../config';
 
-console.log('jwt', config);
-
 const jwtConfig = {
   expiresIn: '30m',
   issuer: 'Act On This',

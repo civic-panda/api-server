@@ -7,18 +7,15 @@ import { wrapRequestHandler, wrapRequestParamHandler } from './catchAsyncErrors'
 
 const createTask: express.RequestHandler = async (req, res, _next) => {
   const { name, causeId, ...otherProps } = req.body;
-  console.log('got request', name, causeId);
 
   const userRole = await userRolesModel.forCause(req.user.userId, causeId);
   if (!permissions.can(userRole, 'create', 'task')) {
     throw { status: 403, message: 'you don\'t have permission to create tasks' };
   }
 
-  console.log('has permission');
   if (!name) throw { status: 400, message: 'name required' };
   if (!causeId) throw { status: 400, message: 'cause required' };
 
-  console.log('creating');
   const task = await taskModel.create({ name, causeId, ...otherProps, published: false });
   res.status(201).json(task);
 }
