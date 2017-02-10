@@ -6,7 +6,9 @@ import roleModel from '../models/Roles';
 import { wrapRequestHandler, wrapRequestParamHandler } from './catchAsyncErrors';
 
 const getRoles: express.RequestHandler = async (_req, res, _next) => {
+  console.log('getting roles');
   const roles = await roleModel.getAll();
+  console.log('got roles', roles);
   res.json(roles);
 }
 
