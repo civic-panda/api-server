@@ -13,7 +13,8 @@
 			"moduleResolution": "node",
 			"noUnusedLocals": true,
 			"noUnusedParameters": true,
-			"pretty": true
+			"pretty": true,
+			"skipLibCheck": true
 	},
 	"filesGlob": [
 			"src/**/*.ts"

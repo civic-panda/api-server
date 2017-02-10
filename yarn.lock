@@ -54,13 +54,17 @@
   dependencies:
     "@types/node" "*"
 
-"@types/history@^2":
-  version "2.0.45"
-  resolved "https://registry.yarnpkg.com/@types/history/-/history-2.0.45.tgz#c76d79a65d189220d9d50f62e0143bdac30a564b"
+"@types/history@*":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@types/history/-/history-4.5.0.tgz#2f5c3aad4fbd00f89e99b83083e354bc5308e307"
 
 "@types/http-errors@^1.5.33":
   version "1.5.33"
   resolved "https://registry.yarnpkg.com/@types/http-errors/-/http-errors-1.5.33.tgz#ae2d1dfc33745ea548f1ae06fc338cdf66406770"
+
+"@types/isomorphic-fetch@0.0.32":
+  version "0.0.32"
+  resolved "https://registry.yarnpkg.com/@types/isomorphic-fetch/-/isomorphic-fetch-0.0.32.tgz#d76f29302aabb38d5caa39b54a96984ffb6bdba3"
 
 "@types/js-yaml@^3.5.28":
   version "3.5.29"
@@ -79,9 +83,19 @@
     "@types/bluebird" "*"
     "@types/node" "*"
 
+"@types/lodash@^4.14.52":
+  version "4.14.52"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.52.tgz#de5c7ab14da1289733233c9b0ec6f9e377db90f5"
+
 "@types/mime@*":
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-0.0.29.tgz#fbcfd330573b912ef59eeee14602bface630754b"
+
+"@types/moment@^2.13.0":
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/@types/moment/-/moment-2.13.0.tgz#604ebd189bc3bc34a1548689404e61a2a4aac896"
+  dependencies:
+    moment "*"
 
 "@types/morgan@^1.7.32":
   version "1.7.32"
@@ -118,6 +132,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-datepicker@^0.40.0":
+  version "0.40.0"
+  resolved "https://registry.yarnpkg.com/@types/react-datepicker/-/react-datepicker-0.40.0.tgz#04dedf158c4adb1506df77969a38901580fa7b0e"
+  dependencies:
+    "@types/react" "*"
+    moment ">=2.14.0"
+
 "@types/react-dom@^0.14.22":
   version "0.14.22"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-0.14.22.tgz#a9a9d2c1461dda668a8bbaef8d62f6abc7d6b9bd"
@@ -131,11 +152,18 @@
     "@types/react" "*"
     redux "^3.6.0"
 
-"@types/react-router@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-3.0.0.tgz#59168a10f9aa38fe88d6b66e1e0e4426798b7941"
+"@types/react-router-bootstrap@^0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@types/react-router-bootstrap/-/react-router-bootstrap-0.23.0.tgz#ebc4c6235624d7a568e2210f926fca56bd749d0d"
   dependencies:
-    "@types/history" "^2"
+    "@types/react" "*"
+    "@types/react-router" "*"
+
+"@types/react-router@*", "@types/react-router@^3.0.1":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-3.0.2.tgz#f3f71ae8222e6b5e79499007fd6ed552dfeaae5b"
+  dependencies:
+    "@types/history" "*"
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^15.0.5":
@@ -180,12 +208,20 @@
     "@types/form-data" "*"
     "@types/node" "*"
 
+"@types/reselect@^2.0.27":
+  version "2.0.27"
+  resolved "https://registry.yarnpkg.com/@types/reselect/-/reselect-2.0.27.tgz#78a53338a99bb1bc4b6aea0e1a9315a0e37e7383"
+
 "@types/serve-static@*":
   version "1.7.31"
   resolved "https://registry.yarnpkg.com/@types/serve-static/-/serve-static-1.7.31.tgz#15456de8d98d6b4cff31be6c6af7492ae63f521a"
   dependencies:
     "@types/express-serve-static-core" "*"
     "@types/mime" "*"
+
+"@types/tinymce@^4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@types/tinymce/-/tinymce-4.5.0.tgz#6afea2b3f02bf2eda5fbd36d40aa508c8fac8990"
 
 JSONStream@^1.0.3:
   version "1.3.0"
@@ -1831,7 +1867,7 @@ isobject@^2.0.0:
   dependencies:
     isarray "1.0.0"
 
-isomorphic-fetch@^2.1.1:
+isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz#611ae1acf14f5e81f729507472819fe9733558a9"
   dependencies:
@@ -2106,7 +2142,7 @@ lodash.set@^4.0.0:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/lodash.set/-/lodash.set-4.3.2.tgz#d8757b1da807dde24816b0d6a84bea1a76230b23"
 
-lodash@^4.11.1, lodash@^4.14.2, lodash@^4.17.3, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.6.0:
+lodash@^4.11.1, lodash@^4.14.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.6.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -2265,7 +2301,7 @@ module-deps@^4.0.8:
     through2 "^2.0.0"
     xtend "^4.0.0"
 
-moment@2.x.x, moment@>=2.14.0:
+moment@*, moment@2.x.x, moment@>=2.14.0, moment@^2.13.0, moment@^2.17.1:
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.17.1.tgz#fed9506063f36b10f066c8b59a144d7faebe1d82"
 
@@ -2822,6 +2858,15 @@ react-bootstrap@^0.30.7:
     uncontrollable "^4.0.1"
     warning "^3.0.0"
 
+react-datepicker@^0.40.0:
+  version "0.40.0"
+  resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-0.40.0.tgz#8ad56d6da5fe587343141041941fd8bafc3ae36f"
+  dependencies:
+    classnames "^2.2.5"
+    moment "^2.13.0"
+    react-onclickoutside "^5.7.1"
+    tether "^1.3.2"
+
 react-dom@^15.4.2:
   version "15.4.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.4.2.tgz#015363f05b0a1fd52ae9efdd3a0060d90695208f"
@@ -2829,6 +2874,10 @@ react-dom@^15.4.2:
     fbjs "^0.8.1"
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
+
+react-onclickoutside@^5.7.1:
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-5.9.0.tgz#c47bb506384adc98d686d134b34412ed17b97437"
 
 react-overlays@^0.6.10:
   version "0.6.10"
@@ -2854,6 +2903,10 @@ react-redux@^5.0.2:
     lodash "^4.2.0"
     lodash-es "^4.2.0"
     loose-envify "^1.1.0"
+
+react-router-bootstrap@^0.23.1:
+  version "0.23.1"
+  resolved "https://registry.yarnpkg.com/react-router-bootstrap/-/react-router-bootstrap-0.23.1.tgz#a1e0b82f49d25a6083c72202ad16aaa64bba0e0c"
 
 react-router@^3.0.2:
   version "3.0.2"
@@ -3050,6 +3103,10 @@ require-directory@^2.1.1:
 require-main-filename@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-1.0.1.tgz#97f717b69d48784f5f526a6c5aa8ffdda055a4d1"
+
+reselect@^2.5.4:
+  version "2.5.4"
+  resolved "https://registry.yarnpkg.com/reselect/-/reselect-2.5.4.tgz#b7d23fdf00b83fa7ad0279546f8dbbbd765c7047"
 
 resolve-dir@^0.1.0:
   version "0.1.1"
@@ -3390,6 +3447,10 @@ tar@~2.2.1:
     fstream "^1.0.2"
     inherits "2"
 
+tether@^1.3.2:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/tether/-/tether-1.4.0.tgz#0f9fa171f75bf58485d8149e94799d7ae74d1c1a"
+
 thenify-all@^1.0.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/thenify-all/-/thenify-all-1.6.0.tgz#1a1918d402d8fc3f98fbf234db0bcc8cc10e9726"
@@ -3428,6 +3489,10 @@ timers-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/timers-browserify/-/timers-browserify-1.4.2.tgz#c9c58b575be8407375cb5e2462dacee74359f41d"
   dependencies:
     process "~0.11.0"
+
+tinymce@^4.5.3:
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.5.3.tgz#1c9210e15d0575ff12eb941a87e6efff39824bd1"
 
 to-arraybuffer@^1.0.0:
   version "1.0.1"
@@ -3550,13 +3615,21 @@ typescript-formatter@^4.0.1:
     editorconfig "^0.13.2"
     glob-expand "^0.2.1"
 
+typescript-formatter@^4.1.0:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/typescript-formatter/-/typescript-formatter-4.1.1.tgz#1175b63d3ee2cb9ec130ecec38fc01e479ee350d"
+  dependencies:
+    commandpost "^1.0.0"
+    editorconfig "^0.13.2"
+    glob-expand "^0.2.1"
+
 typescript@^2.0.3:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.1.1.tgz#41c2b64472f529331b2055c0424862b44ce58d42"
 
-typescript@^2.2.0-dev.20170130:
-  version "2.2.0-dev.20170130"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.0-dev.20170130.tgz#93f4a216242395fd43ac4684c6d7531440a155a5"
+typescript@^2.1.6:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.0.tgz#626f2fc70087d2480f21ebb12c1888288c8614e3"
 
 ua-parser-js@^0.7.9:
   version "0.7.12"
