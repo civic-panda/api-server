@@ -9,6 +9,8 @@ import rolesRouter from './roles';
 
 const router = express.Router();
 
+router.use((_req, _res, next) => { console.log('in router'); return next(); });
+
 router.use('/tokens', tokensRouter);
 router.use('/users', jwt.unless({ method: 'POST' }), usersRouter);
 router.use('/causes', jwt.unless({ method: 'GET' }), causesRouter);
