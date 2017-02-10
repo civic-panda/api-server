@@ -33,7 +33,7 @@ const NavLinks = (props: Props) => (
       </BS.NavItem>
     </BS.Nav>
     <BS.Navbar.Form pullRight>
-      <BS.Button onClick={props.logOut} block>Log Out</BS.Button>
+      <BS.Button onClick={props.logOut} bsStyle={'link'}>Log Out</BS.Button>
     </BS.Navbar.Form>
   </BS.Navbar.Collapse>
 );

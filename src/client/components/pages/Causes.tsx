@@ -2,9 +2,10 @@ import * as React from 'react';
 import * as BS from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import { AppState, user, causes } from '../../modules';
+import { AppState, causes } from '../../modules';
 import JoinCause from '../forms/JoinCause';
 import * as Tables from '../tables';
+import { DownloadButton } from '../ui';
 
 interface ModalProps {
   isModalShowing: boolean;
@@ -34,6 +35,7 @@ interface State {
 interface Props {
   causes: causes.Cause[];
   unsubscribed: causes.Cause[];
+  groupedCauses: causes.Cause[];
   volunteer(ars: any[]): void;
 }
 
@@ -61,15 +63,19 @@ class CausesPage extends React.Component<Props, State> {
         />
         <BS.PageHeader>
           Causes
-          <BS.Button
-            onClick={this.showModal}
-            className={'pull-right'}
-            bsStyle={'primary'}
-          >
-            + Join New Cause
-          </BS.Button>
+          <BS.ButtonToolbar className={'pull-right'}>
+            <BS.Button
+              onClick={this.showModal}
+              className={'pull-right'}
+              bsStyle={'primary'}
+            >
+              <BS.Glyphicon glyph={'plus-sign'} />&nbsp;
+              Join New Cause
+            </BS.Button>
+            <DownloadButton data={this.props.causes} name={'causes'} />
+          </BS.ButtonToolbar>
         </BS.PageHeader>
-        <Tables.Causes causes={this.props.causes} />
+        <Tables.Causes causes={this.props.groupedCauses} />
       </BS.Col>
     );
   }
@@ -78,10 +84,10 @@ class CausesPage extends React.Component<Props, State> {
 const mapStateToProps = (state: AppState) => ({
   causes: causes.selectors.list(state),
   unsubscribed: causes.selectors.unsubscribed(state),
+  groupedCauses: causes.selectors.getGroupedList(state),
 });
 
 const mapDispatchToProps = ({
-  loadUser: user.load,
   volunteer: causes.volunteer,
 });
 

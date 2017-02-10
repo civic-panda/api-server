@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { AppState, volunteers, causes } from '../../modules';
 import * as Tables from '../tables';
+import { DownloadButton } from '../ui';
 
 interface Props {
   causes: causes.Cause[];
@@ -29,6 +30,9 @@ class VolunteersPage extends React.Component<Props, State> {
       <BS.Col xs={12}>
         <BS.PageHeader>
           Volunteers
+          <BS.ButtonToolbar className={'pull-right'}>
+            <DownloadButton data={this.props.volunteers} name={'volunteers'} />
+          </BS.ButtonToolbar>
         </BS.PageHeader>
         <Tables.Volunteers
           causes={causes}

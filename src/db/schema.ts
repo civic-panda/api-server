@@ -1,6 +1,6 @@
 
 /**
- * AUTO-GENERATED FILE @ 2017-02-02 18:38:11 - DO NOT EDIT!
+ * AUTO-GENERATED FILE @ 2017-02-09 17:37:11 - DO NOT EDIT!
  *
  * This file was generated with schemats node package:
  * $ schemats generate -c postgres://username:password@localhost/actonthis -o src/db/schema.ts
@@ -163,8 +163,8 @@ export namespace causesFields {
     export type callToAction = string | null;
     export type blurb = string | null;
     export type brandColor = string | null;
-    export type logo = string | null;
-    export type image = string | null;
+    export type logoImage = string | null;
+    export type heroImage = string | null;
     export type placeholderImage = string | null;
     export type summary = string | null;
     export type facts = string | null;
@@ -182,8 +182,8 @@ export interface causes {
     callToAction: causesFields.callToAction;
     blurb: causesFields.blurb;
     brandColor: causesFields.brandColor;
-    logo: causesFields.logo;
-    image: causesFields.image;
+    logoImage: causesFields.logoImage;
+    heroImage: causesFields.heroImage;
     placeholderImage: causesFields.placeholderImage;
     summary: causesFields.summary;
     facts: causesFields.facts;

@@ -1,8 +1,11 @@
 import db from '../db/schema';
 import { Table, knexInstance } from '../db/knex';
 
-type ReturnedColumns = 'id' | 'name';
-const returnedColumns: ReturnedColumns[] = ['id', 'name']
+type ReturnedColumns = 'id' | 'name' | 'callToAction' | 'blurb' | 'brandColor' | 'logoImage' | 'heroImage' | 'placeholderImage' | 'summary' | 'facts' | 'reading' | 'parent' | 'published' | 'createdAt' | 'updatedAt';
+const returnedColumns: ReturnedColumns[] = [
+  'id', 'name', 'callToAction', 'blurb', 'brandColor', 'logoImage', 'heroImage',
+  'placeholderImage', 'summary', 'facts', 'reading', 'parent', 'published', 'createdAt', 'updatedAt'
+]
 const Cause = new Table<db.causes, ReturnedColumns>('causes', returnedColumns);
 
 const getUnsubscribed = (userId: string) => {

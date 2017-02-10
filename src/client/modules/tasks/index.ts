@@ -5,6 +5,7 @@ export * from './actions';
 import storeKey from '../../storeKey';
 import { AppState } from '../index';
 import { LOG_OUT } from '../auth';
+import * as lists from '../listHelpers';
 
 export interface Task {
   id: string;
@@ -55,17 +56,16 @@ export const reducer = (state = initialState, action: any) => {
   switch (action.type) {
     case SET:
       return { ...state, list: action.payload, loaded: true };
-    case SET_SINGLE: {
-      const index = state.list.findIndex(task => task.id === action.payload.id);
-      const front = state.list.slice(0, index);
-      const back = state.list.slice(index + 1);
+    case SET_SINGLE:
       return {
         ...state,
-        list: [...front, action.payload, ...back]
+        list: lists.addOrUpdateItem(state.list, action.payload),
       }
-    }
     case CREATE:
-      return { ...state, list: [...state.list, action.payload] }
+      return {
+        ...state,
+        list: lists.addItem(state.list, action.payload),
+      }
     case LOG_OUT:
       return initialState;
     default:

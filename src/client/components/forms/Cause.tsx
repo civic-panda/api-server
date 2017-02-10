@@ -3,19 +3,33 @@ import { connect } from 'react-redux';
 import * as Forms from 'redux-form';
 import * as BS from 'react-bootstrap';
 
+import { scrollToTop } from '../../util/scrollToTop';
 import { AppState, causes } from '../../modules';
-import { BasicField, HtmlField } from './fields';
+import { BasicField, HtmlField, ImageField } from './fields';
 
 interface OwnProps {
   cause: causes.Cause;
+  setOnLeaveHook(isDirty: () => boolean): void;
 }
 
 class Cause extends React.Component<any, {}>{
+  public componentDidMount() {
+    this.props.setOnLeaveHook(() => !this.props.pristine);
+  }
+
+  private handleSubmit = () => {
+    scrollToTop();
+    this.props.handleSubmit();
+  }
+
   public render() {
     return (
       <form>
         <BS.Collapse in={!!this.props.error}>
           <BS.Alert bsStyle="danger">{this.props.error}</BS.Alert>
+        </BS.Collapse>
+        <BS.Collapse in={!!this.props.submitSucceeded}>
+          <BS.Alert bsStyle="success">Saved Successfully!</BS.Alert>
         </BS.Collapse>
         <Forms.Field
           name={'name'}
@@ -27,6 +41,21 @@ class Cause extends React.Component<any, {}>{
           name={'callToAction'}
           label={'Call To Action'}
           component={HtmlField}
+        />
+        <Forms.Field
+          name={'logoImage'}
+          label={'Logo'}
+          component={ImageField}
+        />
+        <Forms.Field
+          name={'heroImage'}
+          label={'Hero Image (Across top of cause landing page)'}
+          component={ImageField}
+        />
+        <Forms.Field
+          name={'placeholderImage'}
+          label={'Default Task Image (Will be cropped to square)'}
+          component={ImageField}
         />
         <Forms.Field
           name={'blurb'}
@@ -51,7 +80,7 @@ class Cause extends React.Component<any, {}>{
         <br />
         <BS.ButtonToolbar>
           <BS.Button
-            onClick={this.props.handleSubmit}
+            onClick={this.handleSubmit}
             disabled={this.props.submitting || this.props.pristine}
             bsStyle={'primary'}
             type={'submit'}
@@ -71,12 +100,22 @@ class Cause extends React.Component<any, {}>{
 }
 
 const mapStateToProps = (_state: AppState, ownProps: OwnProps) => ({
-  initialValues: ownProps.cause,
+  initialValues: {
+    name: ownProps.cause.name,
+    callToAction: ownProps.cause.callToAction,
+    logoImage: ownProps.cause.logoImage,
+    heroImage: ownProps.cause.heroImage,
+    placeholderImage: ownProps.cause.placeholderImage,
+    blurb: ownProps.cause.blurb,
+    summary: ownProps.cause.summary,
+    facts: ownProps.cause.facts,
+    reading: ownProps.cause.reading,
+  },
 });
 
 const mapDispatchToProps = (dispatch: any, ownProps: OwnProps) => ({
   onSubmit: (formValues: any) => dispatch(causes.update(ownProps.cause)(formValues))
 });
 
-const TaskForm = Forms.reduxForm({ form: 'task' })(Cause);
-export default connect(mapStateToProps, mapDispatchToProps)(TaskForm);
+const CauseForm = Forms.reduxForm({ form: 'cause' })(Cause);
+export default connect(mapStateToProps, mapDispatchToProps)(CauseForm);

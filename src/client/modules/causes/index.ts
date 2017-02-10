@@ -1,10 +1,12 @@
-import { createSelector } from 'reselect';
-
 export * from './actions';
+
+import { createSelector } from 'reselect';
+import * as _ from 'lodash';
 
 import storeKey from '../../storeKey';
 import { AppState } from '../index';
 import { LOG_OUT } from '../auth';
+import * as lists from '../listHelpers';
 
 export interface Cause {
   id: string;
@@ -12,13 +14,14 @@ export interface Cause {
   callToAction: string;
   blurb: string;
   brandColor: string;
-  logo: string;
-  image: string;
+  logoImage: string;
+  heroImage: string;
   placeholderImage: string;
   summary: string;
   facts: string;
   reading: string;
   parent: string;
+  children: Cause[];
   published: boolean;
   createdAt: string;
   updatedAt: string;
@@ -45,6 +48,10 @@ const getAll = createSelector(getState, (state): Cause[] => state.list);
 const getList = createSelector(getState, (state): Cause[] => state.list.filter(cause => cause.role !== null));
 const getUnsubscribedList = createSelector(getState, (state): Cause[] => state.list.filter(cause => cause.role === null));
 const find = (key: string, value: any) => createSelector(getAll, list => list.find((cause: Cause) => cause[key] === value));
+const getGroupedList = createSelector(getList, list => {
+  const grouped = _.groupBy(list, (cause) => cause.parent || 'parents');
+  return grouped['parents'].map((cause): Cause => ({ ...cause, children: grouped[cause.id] }));
+})
 
 export const selectors = {
   state: getState,
@@ -52,29 +59,23 @@ export const selectors = {
   unsubscribed: getUnsubscribedList,
   find,
   getAll,
+  getGroupedList,
 }
 
 export const reducer = (state = initialState, action: any) => {
   switch (action.type) {
     case SET:
       return { ...state, list: action.payload, loaded: true };
-    case SET_SINGLE: {
-      const index = state.list.findIndex(cause => cause.id === action.payload.id);
-      const front = state.list.slice(0, index);
-      const back = state.list.slice(index + 1);
+    case SET_SINGLE:
       return {
         ...state,
-        list: [...front, action.payload, ...back]
+        list: lists.addOrUpdateItem(state.list, action.payload),
       }
-    }
     case SET_ROLE: {
       const { causeId, role } = action.payload;
       return {
         ...state,
-        list: state.list.map(cause => cause.id !== causeId ? cause : ({
-          ...cause,
-          role
-        }))
+        list: lists.updateItem(state.list, { id: causeId, role }),
       }
     }
     case LOG_OUT:

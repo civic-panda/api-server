@@ -9,6 +9,8 @@ interface Props {
   cause: causes.Cause;
   canEdit: boolean;
   params: any;
+  router: any;
+  route: any;
 }
 
 interface State {
@@ -24,6 +26,9 @@ class CauseComponent extends React.Component<Props, State> {
   }
 
   public switchTab = (selectedKey: any) => this.setState({ tab: selectedKey })
+  private setOnLeaveHook = (isDirty: () => boolean) => this.props.router.setRouteLeaveHook(this.props.route, () => {
+    if (isDirty()) { return 'You have unsaved information, are you sure you want to leave this page?'; }
+  })
 
   public render() {
     return (
@@ -34,7 +39,7 @@ class CauseComponent extends React.Component<Props, State> {
         {this.props.canEdit
           ? (
             <BS.Col xs={12} sm={10} smOffset={1} md={8} mdOffset={2} lg={6} lgOffset={3}>
-              <CauseForm cause={this.props.cause} />
+              <CauseForm cause={this.props.cause} setOnLeaveHook={this.setOnLeaveHook} />
             </BS.Col>
           ) : 'Cannot edit this cause'
         }

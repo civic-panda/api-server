@@ -4,7 +4,7 @@ type hasId = {
 }
 
 export const updateItem = <T extends hasId>(list: T[], update: Partial<T>): T[] => {
-  const index = list.findIndex(item => item.id === update.id);
+  const index = list.findIndex(item => item.id === update.id as string);
 
   return [
     ...list.slice(0, index),
@@ -24,7 +24,7 @@ export const addOrUpdateItem = <T extends hasId>(list: T[], item: T): T[] => {
 }
 
 export const removeItem = <T extends hasId>(list: T[], update: Partial<T>): T[] => {
-  const index = list.findIndex(item => item.id === update.id);
+  const index = list.findIndex(item => item.id === update.id as string);
 
   return [
     ...list.slice(0, index),

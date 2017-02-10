@@ -9,7 +9,7 @@ import { wrapRequestHandler, wrapRequestParamHandler } from './catchAsyncErrors'
 
 const getVolunteers = async (userId: string) => {
   const userCauses = await userRolesModel.getAll(userId);
-  const withPermissions = userCauses.filter((cause: any) => permissions.can(cause.role, 'promote', 'cause'));
+  const withPermissions = userCauses.filter((cause) => permissions.can(cause.role, 'promote', 'cause'));
   return await userRolesModel.promotable(userId, withPermissions);
 }
 

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { AppState, causes, permissions, tasks } from '../../modules';
 import CreateTask from '../forms/CreateTask';
 import * as Tables from '../tables';
+import { DownloadButton } from '../ui';
 
 interface Props {
   causes: causes.Cause[];
@@ -51,14 +52,18 @@ class TasksPage extends React.Component<Props, State> {
         {this.renderModal()}
         <BS.PageHeader>
           Tasks
-          <BS.Button
-            onClick={this.showModal}
-            className={'pull-right'}
-            bsStyle={'primary'}
-            disabled={causesWithCreatePermission.length === 0}
-          >
-            + Create New Task
-          </BS.Button>
+          <BS.ButtonToolbar className={'pull-right'}>
+            <BS.Button
+              onClick={this.showModal}
+              className={'pull-right'}
+              bsStyle={'primary'}
+              disabled={causesWithCreatePermission.length === 0}
+            >
+              <BS.Glyphicon glyph={'plus-sign'} />&nbsp;
+              Create New Task
+            </BS.Button>
+            <DownloadButton data={this.props.tasks} name={'tasks'} />
+          </BS.ButtonToolbar>
         </BS.PageHeader>
         <Tables.Tasks tasks={tasks} causes={causes} />
       </BS.Col>

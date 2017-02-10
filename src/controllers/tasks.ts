@@ -54,7 +54,7 @@ const updateTask: express.RequestHandler = async (req, res, _next) => {
   if (!permissions.can(userRole, 'edit', 'task')) {
     throw { status: 403, message: 'you don\'t have access to that task' };
   }
-  if (published !== undefined && !permissions.can(userRole, 'publish', 'task')) {
+  if (published !== undefined && published !== req.params.task.published && !permissions.can(userRole, 'publish', 'task')) {
     throw { status: 403, message: 'you don\'t have access to that task' };
   }
   // update task

@@ -17,7 +17,7 @@ interface State {
 }
 
 const nullFn = ():void => null;
-const defaultSort = (row: Row) => row.name || row.id;
+const defaultSort = (row: Row) => row.id;
 
 export class Table extends React.Component<Props, State>{
   public constructor(props: Props) {

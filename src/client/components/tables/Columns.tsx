@@ -3,14 +3,15 @@
 import * as BS from 'react-bootstrap';
 // import { Link } from 'react-router';
 
-export type Row = {
+export interface Row {
   id: string;
   [x: string]: any;
 }
 
-export type Column<T extends Row> = {
+export interface Column<T extends Row> {
   key: string;
   name: string;
+  width?: string;
   renderAs?(row: T): any;
   sortAs?(row: T): any;
   className?: string;

@@ -3,17 +3,28 @@ import { connect } from 'react-redux';
 import * as Forms from 'redux-form';
 import * as BS from 'react-bootstrap';
 
+import { scrollToTop } from '../../util/scrollToTop';
 import { AppState, tasks } from '../../modules';
-import { BasicField, DateField, HtmlField } from './fields';
+import { BasicField, DateField, HtmlField, ImageField } from './fields';
 import * as Templates from './task-templates';
 
 interface OwnProps {
   task: tasks.Task;
+  setOnLeaveHook(isDirty: () => boolean): void;
 }
 
 const NullComponent = () => (<div>None</div>);
 
 class Task extends React.Component<any, {}>{
+  public componentDidMount() {
+    this.props.setOnLeaveHook(() => !this.props.pristine);
+  }
+
+  private handleSubmit = () => {
+    scrollToTop();
+    this.props.handleSubmit();
+  }
+
   public render() {
     const Template = Templates[this.props.templateType] || NullComponent;
 
@@ -21,6 +32,9 @@ class Task extends React.Component<any, {}>{
       <form>
         <BS.Collapse in={!!this.props.error}>
           <BS.Alert bsStyle="danger">{this.props.error}</BS.Alert>
+        </BS.Collapse>
+        <BS.Collapse in={!!this.props.submitSucceeded}>
+          <BS.Alert bsStyle="success">Saved Successfully!</BS.Alert>
         </BS.Collapse>
         <BS.Panel header={(<h3>Overview</h3>)}>
           <Forms.Field
@@ -33,6 +47,11 @@ class Task extends React.Component<any, {}>{
             name={'summary'}
             label={'Summary'}
             component={HtmlField}
+          />
+          <Forms.Field
+            name={'image'}
+            label={'Image'}
+            component={ImageField}
           />
         </BS.Panel>
         <BS.Panel header={(<h3>Time & Place</h3>)}>
@@ -75,7 +94,7 @@ class Task extends React.Component<any, {}>{
         <br />
         <BS.ButtonToolbar>
           <BS.Button
-            onClick={this.props.handleSubmit}
+            onClick={this.handleSubmit}
             disabled={this.props.submitting || this.props.pristine}
             bsStyle={'primary'}
             type={'submit'}
