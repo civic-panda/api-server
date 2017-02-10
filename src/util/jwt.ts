@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 import * as crypto from 'crypto';
 
-import { JWT_PRIVATE_KEY } from '../config';
+import config from '../config';
 
 const jwtConfig = {
   expiresIn: '30m',
@@ -15,11 +15,11 @@ export interface Payload {
 
 const createToken = (payload: Payload, optConfig?: Object) => jwt.sign(
   payload,
-  JWT_PRIVATE_KEY,
+  config.JWT_PRIVATE_KEY,
   { ...jwtConfig, ...optConfig }
 );
 
-const decodeToken = (token: string) => jwt.verify(token, JWT_PRIVATE_KEY);
+const decodeToken = (token: string) => jwt.verify(token, config.JWT_PRIVATE_KEY);
 
 const createRefreshToken = () => crypto.randomBytes(64).toString('hex');
 

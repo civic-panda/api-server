@@ -1,5 +1,5 @@
 import * as jwt from 'express-jwt';
-import { JWT_PRIVATE_KEY } from '../config';
+import config from '../config';
 
-export const optionalJwt = jwt({ secret: JWT_PRIVATE_KEY, credentialsRequired: false });
-export default jwt({ secret: JWT_PRIVATE_KEY });
+export const optionalJwt = jwt({ secret: config.JWT_PRIVATE_KEY, credentialsRequired: false });
+export default jwt({ secret: config.JWT_PRIVATE_KEY });
