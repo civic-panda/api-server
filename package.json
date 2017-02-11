@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "rimraf ./build && tsc -p tsconfig.json && npm run copy-public && browserify ./build/client/index.js -o ./build/public/js/bundle.js",
-    "copy-public": "cp -R src/public ./build/public && cp -R ./node_modules/tinymce ./build/public/js",
+    "copy-public": "cp -R src/public ./build/public",
     "watch-tsc": "tsc -p tsconfig.json -w",
     "watch-client": "watchify ./build/client/index.js -o ./build/public/js/bundle.js",
     "dev": "nodemon",
@@ -95,7 +95,8 @@
     "ts-node": "^1.7.0",
     "tsify": "^3.0.1",
     "typescript": "^2.1.6",
-    "typescript-formatter": "^4.1.0"
+    "typescript-formatter": "^4.1.0",
+    "watson-developer-cloud": "^2.14.6"
   },
   "devDependencies": {
     "nodemon": "^1.11.0",
