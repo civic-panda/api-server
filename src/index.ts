@@ -7,6 +7,13 @@ import fetch from 'node-fetch';
 import apiRouter from './controllers';
 import * as congress from './congress';
 
+var watson = require('watson-developer-cloud');
+var _=require('lodash')
+
+const alchemy_language = watson.alchemy_language({
+  api_key: '53cef52af1d2c28849feec99cd787bada13bb439'
+});
+
 // const cmsUrl = 'http://localhost:3000';
 const cmsUrl = 'https://admin.actonthis.org';
 // const cmsUrl = 'https://act-on-this-cms-staging.herokuapp.com';
@@ -87,9 +94,41 @@ app.get('/article', async (req, res) => {
     if (!url) {
       url = 'http://www.slate.com/articles/double_x/doublex/2015/12/rape_victims_are_still_being_charged_for_rape_kits.html';
     }
-    console.log("Fetching URL", url);
 
-    res.json(url);
+    console.log("Fetching URL", url);
+    const alchemy_parameters = {
+      extract: 'title,text,concepts,keywords,entities',
+      sentiment: 1,
+      maxRetrieve: 8,
+      showSourceText: 1,
+      url: url
+    };
+
+    alchemy_language.combined(alchemy_parameters, (err:string, response:any) => {
+      if (err) {
+        console.log('error:', err);
+        res.sendStatus(404);
+      } else {
+        // console.log(JSON.stringify(response, null, 2));
+
+        const title = response.title;
+        const text = response.text;
+        const keywordArr = _.map(response.keywords,'text');
+        const conceptsArr = _.map(response.concepts,'text');
+        const entitiesArr = _.map(response.entities,'text')
+
+        var combinedArray = _.concat(keywordArr,conceptsArr,entitiesArr);
+        combinedArray = _.uniq(_.map(combinedArray, _.method('toLowerCase')));
+
+        // console.log("Article Title:",title);
+        // console.log("Article Text:",text);
+        // console.log("Keywords:",keywordArr);
+        // console.log("Concepts:",conceptsArr);
+        // console.log("Entities:",entitiesArr);
+        // console.log("All keywords:",combinedArray);
+        res.json({keys:combinedArray,url,title,text});
+      }
+    });
   } catch (e) {
     console.log(e);
     res.sendStatus(404);
