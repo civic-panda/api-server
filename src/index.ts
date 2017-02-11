@@ -116,6 +116,11 @@ app.use('/', async (req, res) => {
   }
 });
 
+// AWS Health Check
+app.use('/test', (_req, res) => {
+  res.sendStatus(200);
+})
+
 app.use((err: any, _req: any, res: any, next:any) => {
   if (err.name === 'UnauthorizedError') {
     res.status(401).send('invalid token');
