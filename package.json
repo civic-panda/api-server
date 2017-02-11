@@ -74,7 +74,6 @@
     "morgan": "^1.7.0",
     "ms": "^0.7.2",
     "node-fetch": "^1.6.3",
-    "nodemon": "^1.11.0",
     "pg": "^6.1.2",
     "qs": "^6.3.0",
     "react": "^15.4.2",
@@ -100,7 +99,9 @@
     "typescript-formatter": "^4.1.0",
     "watchify": "^3.9.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
   "engines": {
     "node": "7.2.1",
     "npm": "3.10.10"
