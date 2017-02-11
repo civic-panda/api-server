@@ -198,6 +198,11 @@ app.post('/email-subscribers', async (req, res) => {
   }
 });
 
+// AWS Health Check
+app.use('/test', (_req, res) => {
+  res.sendStatus(200);
+})
+
 app.use('/', async (req, res) => {
   const url = sunlightUrl + req.url;
   const response = await fetch(url);
@@ -214,11 +219,6 @@ app.use('/', async (req, res) => {
     res.json({});
   }
 });
-
-// AWS Health Check
-app.use('/test', (_req, res) => {
-  res.sendStatus(200);
-})
 
 app.use((err: any, _req: any, res: any, next:any) => {
   if (err.name === 'UnauthorizedError') {
