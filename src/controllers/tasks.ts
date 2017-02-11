@@ -5,6 +5,11 @@ import userRolesModel from '../models/UserRoles';
 import taskModel from '../models/Task';
 import { wrapRequestHandler, wrapRequestParamHandler } from './catchAsyncErrors';
 
+const getTasks: express.RequestHandler = async (_req, res) => {
+  const causes = await taskModel.getAll();
+  res.json(causes);
+}
+
 const createTask: express.RequestHandler = async (req, res, _next) => {
   const { name, causeId, ...otherProps } = req.body;
 
@@ -77,6 +82,7 @@ const updateTask: express.RequestHandler = async (req, res, _next) => {
 const router = express.Router();
 
 router
+  .get('/', wrapRequestHandler(getTasks))
   .post('/', wrapRequestHandler(createTask))
   .param('taskId', wrapRequestParamHandler(getTaskParam))
   .get('/:taskId', wrapRequestHandler(getTask))
