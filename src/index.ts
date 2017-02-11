@@ -220,14 +220,12 @@ app.use('/', async (req, res) => {
   }
 });
 
-app.use((err: any, _req: any, res: any, next:any) => {
+app.use((err: any, _req: any, res: any) => {
   if (err.name === 'UnauthorizedError') {
     res.status(401).send('invalid token');
   }
 
   res.status(err.status).send(err);
-
-  return next();
 });
 
 const port = process.env.PORT || 8081;
