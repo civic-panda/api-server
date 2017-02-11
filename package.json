@@ -9,7 +9,7 @@
     "watch-tsc": "tsc -p tsconfig.json -w",
     "watch-client": "watchify ./build/client/index.js -o ./build/public/js/bundle.js",
     "dev": "nodemon",
-    "start": "NODE_ENV=production node ./build/index.js",
+    "start": "node build/index.js",
     "migrate": "knex migrate:latest --knexfile ./build/db/knexfile.js",
     "rollback": "knex migrate:rollback --knexfile ./build/db/knexfile.js",
     "seed": "knex seed:run --knexfile ./build/db/knexfile.js",
