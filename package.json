@@ -1,11 +1,16 @@
 {
-  "name": "my-node-app",
+  "name": "actonthis-api-server",
   "version": "0.0.1",
   "private": true,
+  "author": "Matt Casey",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/civic-panda/api-server.git"
+  },
   "scripts": {
     "build": "rimraf ./build && tsc -p tsconfig.json && npm run copy-public && browserify ./build/client/index.js -o ./build/public/js/bundle.js",
     "copy-public": "cp -R src/public ./build/public && cp -R ./node_modules/tinymce ./build/public/js",
-    "postinstall": "npm run build",
     "watch-tsc": "tsc -p tsconfig.json -w",
     "watch-client": "watchify ./build/client/index.js -o ./build/public/js/bundle.js",
     "dev": "nodemon",
@@ -50,7 +55,6 @@
     "@types/reselect": "^2.0.27",
     "@types/tinymce": "^4.5.0",
     "asciidoctor.js": "^1.5.5-4",
-    "bcrypt": "^1.0.2",
     "bcryptjs": "^2.4.0",
     "bluebird": "^3.4.7",
     "body-parser": "^1.15.2",
@@ -69,7 +73,6 @@
     "morgan": "^1.7.0",
     "ms": "^0.7.2",
     "node-fetch": "^1.6.3",
-    "nodemon": "^1.11.0",
     "pg": "^6.1.2",
     "qs": "^6.3.0",
     "react": "^15.4.2",
@@ -92,12 +95,14 @@
     "ts-node": "^1.7.0",
     "tsify": "^3.0.1",
     "typescript": "^2.1.6",
-    "typescript-formatter": "^4.1.0",
+    "typescript-formatter": "^4.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0",
     "watchify": "^3.9.0"
   },
-  "devDependencies": {},
   "engines": {
     "node": "7.2.1",
-    "npm": "4.0.3"
+    "npm": "3.10.10"
   }
 }
