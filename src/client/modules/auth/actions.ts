@@ -4,7 +4,10 @@ import { SubmissionError } from 'redux-form';
 
 import { callApi } from '../../util/api'
 import { AppState } from '../index';
-import { LOG_OUT, SET } from './index';
+import { JWT_EXPIRED, LOG_OUT, SET } from './index';
+
+export const expireJwt = () => ({ type: JWT_EXPIRED, payload: {} })
+export const setToken = (token: string) => ({ type: SET, payload: { token } });
 
 export const signUp = (formValues: any) => {
   return async (dispatch: Dispatch<AppState>) => {

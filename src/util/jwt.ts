@@ -4,7 +4,7 @@ import * as crypto from 'crypto';
 import config from '../config';
 
 const jwtConfig = {
-  expiresIn: '30m',
+  expiresIn: '1h',
   issuer: 'Act On This',
 };
 
