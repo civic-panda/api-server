@@ -1,6 +1,6 @@
-const congress = require('../../data/legislators-current.json') as CongressPerson[];
-const committees = require('../../data/committees-current.json') as Committee[];
-const committeeMembership = require('../../data/committee-membership-current.json') as CommitteeMembership;
+export const congress = require('../../data/legislators-current.json') as CongressPerson[];
+export const committees = require('../../data/committees-current.json') as Committee[];
+export const committeeMembership = require('../../data/committee-membership-current.json') as CommitteeMembership;
 
 interface Term {
   start: string;
@@ -29,7 +29,7 @@ interface SenTerm extends Term {
   stateRank: 'junior' | 'senior';
 }
 
-interface CongressPerson {
+export interface CongressPerson {
   id: {
     bioguide: string;
     thomas: string;
@@ -113,7 +113,6 @@ export const getSenators = (state: string) =>
 export const getCommitteeMembers = (committeeId: string, subcommitteeId: string = '') => {
   let committee;
   let subcommittee;
-  let members;
 
   committee = committees.find(committee => committee.thomasId === committeeId);
 
@@ -126,10 +125,10 @@ export const getCommitteeMembers = (committeeId: string, subcommitteeId: string 
   }
 
   const membership = committeeMembership[`${committeeId}${subcommitteeId}`] || [];
-
-  members = membership
-    .filter(member => member.rank === 1)
-    .map(member => congress.find(congressPerson => congressPerson.id.bioguide === member.bioguide))
+  const members = membership.map(member => ({
+    rank: member.rank,
+    ...congress.find(congressPerson => congressPerson.id.bioguide === member.bioguide),
+  }));
 
   return {
     members,
