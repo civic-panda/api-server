@@ -86,10 +86,10 @@ class Task extends React.Component<any, {}>{
             component={BasicField}
             options={[
               { name: 'Custom', value: 'Custom' },
-              { name: 'Call Your Congressmen and Congresswomen', value: 'CallCongress' },
+              { name: 'Call List', value: 'Call' },
             ]}
           />
-          <Template />
+          <Template {...this.props.templateProps} />
         </BS.Panel>
         <br />
         <BS.ButtonToolbar>
@@ -113,10 +113,10 @@ class Task extends React.Component<any, {}>{
   }
 }
 
-const templateTypeSelector = Forms.formValueSelector('task')
-
+const templateTypeSelector = Forms.formValueSelector('task');
 const mapStateToProps = (state: AppState, ownProps: OwnProps) => ({
   templateType: templateTypeSelector(state, 'template'),
+  templateProps: templateTypeSelector(state, 'templateProps'),
   initialValues: {
     template: 'Custom',
     ...ownProps.task,
