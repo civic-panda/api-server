@@ -53,7 +53,6 @@ function ListComponent<T>(props: ListProps<T>) {
   // const unselected = props.items.filter(item => {
     // props.fields.
   // });
-  props.fields.map(item => console.log('item', item));
   return (
     <BS.Row>
       <BS.Col xs={12}>

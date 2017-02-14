@@ -67,7 +67,6 @@ const states = [
 ];
 
 export const CallListBuilder = (props: Props) => {
-  console.log('props in CallListBuilder component', props);
   const { filter } = props;
   const committees = props.type === 'national'
     ? nationalCommitteeOptions : [];

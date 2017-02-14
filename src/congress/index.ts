@@ -111,7 +111,6 @@ export const getSenators = (state: string) =>
   });
 
 export const getCommitteeMembers = (committeeId: string, subcommitteeId: string = '') => {
-  console.log('getCommitteeMembers', committeeId, subcommitteeId);
   let committee;
   let subcommittee;
 
@@ -130,8 +129,6 @@ export const getCommitteeMembers = (committeeId: string, subcommitteeId: string 
     rank: member.rank,
     ...congress.find(congressPerson => congressPerson.id.bioguide === member.bioguide),
   }));
-
-  console.log('found', members);
 
   return {
     members,
