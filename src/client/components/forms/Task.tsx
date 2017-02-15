@@ -87,6 +87,7 @@ class Task extends React.Component<any, {}>{
             options={[
               { name: 'Custom', value: 'Custom' },
               { name: 'Call List', value: 'Call' },
+              { name: 'Embeded iFrame (e.g. Google Forms)', value: 'Iframe' },
             ]}
           />
           <Template {...this.props.templateProps} />
