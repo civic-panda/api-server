@@ -1,8 +1,8 @@
 import * as express from 'express';
 
-// import jwt from '../util/jwt';
+import jwt from '../util/jwt';
 import userModel from '../models/User';
-// import refreshTokenModel from '../models/RefreshToken';
+import refreshTokenModel from '../models/RefreshToken';
 import { wrapRequestHandler } from './catchAsyncErrors';
 
 const authenticateUser: express.RequestHandler = async (req, res, _next) => {
@@ -14,20 +14,20 @@ const authenticateUser: express.RequestHandler = async (req, res, _next) => {
   res.status(201).json({ ...tokens, userId: user.id })
 }
 
+const refreshToken: express.RequestHandler = async (req, res) => {
+  const { refreshToken: requestedToken, name } = req.body;
+  if (!requestedToken) throw { status: 400, message: 'token required' };
+  const refreshToken = await refreshTokenModel.findOne({ token: requestedToken, name });
+  if (!refreshToken) throw { status: 404, message: 'token doesn\'t exist' };
+  const newToken = jwt.createToken({ userId: refreshToken.userId, type: 'BEARER' });
+  res.status(201).json({ token: newToken });
+}
+
 const router = express.Router();
 
 router
   .post('/', wrapRequestHandler(authenticateUser))
-  // .put('/', async ctx => {
-  //   // Refresh token
-  //   const { refreshToken: requestedToken, name } = ctx.request.body;
-  //   ctx.assert(requestedToken, 400, 'token required');
-  //   const refreshToken = await refreshTokenModel.findOne({ token: requestedToken, name });
-  //   console.log('finding ', requestedToken, name, refreshToken);
-  //   ctx.assert(refreshToken, 404, 'token doesn\'t exist');
-  //   const newToken = jwt.createToken({ userId: refreshToken.userId });
-  //   ctx.body = { token: newToken };
-  // })
+  .put('/', wrapRequestHandler(refreshToken))
   // .delete('/', async ctx => {
   //   const { refreshToken: requestedToken, name } = ctx.request.body.refreshToken;
   //   const refreshToken = await refreshTokenModel.findOne({ token: requestedToken, name });

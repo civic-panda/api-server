@@ -24,6 +24,7 @@
     "load-data": "npm run clone-data && npm run convert-data"
   },
   "dependencies": {
+    "@types/base-64": "^0.1.0",
     "@types/bcryptjs": "^2.4.0",
     "@types/body-parser": "0.0.33",
     "@types/cors": "0.0.33",
@@ -55,6 +56,7 @@
     "@types/reselect": "^2.0.27",
     "@types/tinymce": "^4.5.0",
     "asciidoctor.js": "^1.5.5-4",
+    "base-64": "^0.1.0",
     "bcryptjs": "^2.4.0",
     "bluebird": "^3.4.7",
     "body-parser": "^1.15.2",

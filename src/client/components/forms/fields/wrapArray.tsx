@@ -2,22 +2,22 @@ import * as React from 'react';
 import * as BS from 'react-bootstrap';
 import * as Forms from 'redux-form';
 
-export interface Props extends Forms.WrappedFieldProps<any> {
+export interface Props<T> extends Forms.WrappedFieldArrayProps<T> {
   name: string;
   help?: string;
   label?: string;
-  options?: { name: string, value: string, disabled?: boolean }[];
+  options?: { name: string, value: string }[];
   componentClass?: string;
 }
 
-export const wrapField = (Field: React.StatelessComponent<Props> | React.ComponentClass<Props>) => {
-  return class WrappedField extends React.Component<Props, any> {
-    public focus = () => {/* Do nothing */}
+function wrapArray<T>(Field: React.StatelessComponent<Props<T>> | React.ComponentClass<Props<T>>) {
+  return class WrappedField extends React.Component<Props<T>, any> {
+    public focus = () => {/* Do nothing */ }
 
     public render() {
-      const { input, label, meta, help } = this.props;
+      const { label, meta, help } = this.props;
       return (
-        <BS.FormGroup controlId={input.name}>
+        <BS.FormGroup controlId={label}>
           <BS.ControlLabel>
             {label}
           </BS.ControlLabel>
@@ -33,4 +33,4 @@ export const wrapField = (Field: React.StatelessComponent<Props> | React.Compone
   }
 }
 
-export default wrapField;
+export default wrapArray;

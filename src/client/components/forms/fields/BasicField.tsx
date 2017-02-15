@@ -4,16 +4,41 @@ import * as BS from 'react-bootstrap';
 import wrapField, { Props } from './wrapField';
 
 const RenderField = (props: Props) => {
-  const { input, meta, options, ...otherProps } = props;
+  const { componentClass, input, meta, options, ...otherProps } = props;
+
+  if (componentClass === 'select') {
+    return (
+      <BS.FormControl
+        {...input}
+        {...otherProps}
+        componentClass={componentClass}
+      >
+        <option
+          key={'placeholder'}
+          disabled
+        >
+          ---
+        </option>
+        {options && options.map(option => (
+          <option
+            key={option.name}
+            value={option.value}
+            disabled={option.disabled}
+          >
+            {option.name}
+          </option>
+        ))}
+      </BS.FormControl>
+    );
+  }
 
   return (
     <BS.FormControl
       {...input}
       {...otherProps}
-    >
-      {options && options.map(option => (<option key={option.name} value={option.value}>{option.name}</option>))}
-    </BS.FormControl>
-  )
+      componentClass={componentClass}
+    />
+  );
 };
 
 export const BasicField = wrapField(RenderField);
