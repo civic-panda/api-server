@@ -3,6 +3,7 @@ import * as Forms from 'redux-form';
 
 import { BasicField, ListSelect } from '../fields';
 import * as NationalCongress from '../../../../congress';
+import states from './states';
 
 interface Props {
   type: 'national' | 'state',
@@ -61,11 +62,6 @@ const getLegislators = (props: Props) => {
   return [];
 }
 
-const states = [
-  { name: 'Nationwide', value: 'USA' },
-  { name: 'New York', value: 'NY' },
-];
-
 export const CallListBuilder = (props: Props) => {
   const { filter } = props;
   const committees = props.type === 'national'
@@ -80,7 +76,7 @@ export const CallListBuilder = (props: Props) => {
         component={BasicField}
         options={[
           { name: 'National legislators', value: 'national' },
-          { name: 'State legislators', value: 'state', disabled: true },
+          { name: 'State legislators', value: 'state' },
         ]}
       />
       <Forms.Field
@@ -89,10 +85,19 @@ export const CallListBuilder = (props: Props) => {
         componentClass={'select'}
         component={BasicField}
         options={[
-          { name: 'By committee', value: 'committee' },
+          { name: 'By committee', value: 'committee', disabled: props.type !== 'national' },
           { name: 'By user\'s district', value: 'district' },
         ]}
       />
+      {props.type === 'state' &&
+        <Forms.Field
+          name={'state'}
+          label={'State'}
+          componentClass={'select'}
+          component={BasicField}
+          options={states}
+        />
+      }
       {filter === 'committee' &&
         <Forms.Field
           name={'committee'}
