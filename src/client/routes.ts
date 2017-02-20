@@ -1,14 +1,17 @@
 import * as pages from './components/pages';
 import * as redux from 'react-redux';
-import { AppState, auth, user } from './modules'
+import { AppState, auth, user, storage } from './modules'
 
 const scrollToTop = () => window.scrollTo(0, 0);
 
 const refreshData = (store: redux.Store<AppState>) => (_nextState: any, _replace: any) => {
   // TODO more fine-grained data refreshing
   const state = store.getState();
-  const userId = auth.selectors.userId(state);
-  store.dispatch(user.load(userId));
+  const isLoaded = storage.selectors.isLoaded(state);
+  if (isLoaded) {
+    const userId = auth.selectors.userId(state);
+    store.dispatch(user.load(userId));
+  }
 };
 
 function siteRoutes(store: any) {

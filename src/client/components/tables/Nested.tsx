@@ -126,7 +126,7 @@ export class Nested extends React.Component<Props, State>{
         </thead>
         <tbody>
           {rows.sort(sortFn).map(row => {
-            const isExpanded = this.state.expanded[row.id];
+            const isExpanded = this.state.expanded[row.id] === false; // default open if undefined
             const parent = this.renderParentRow(row);
             const children = isExpanded && row.children.sort(sortFn).map(this.renderChildRow);
             return [parent, children];

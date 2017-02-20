@@ -7,7 +7,7 @@ import states from './states';
 
 interface Props {
   type: 'national' | 'state',
-  filter: 'committee' | 'district' | 'none',
+  filter: 'committee' | 'district' | 'name' | 'none',
   state?: string;
   committee?: string;
   subcommittee?: string;
@@ -56,6 +56,8 @@ const getLegislators = (props: Props) => {
       return [];
     } else if (props.filter === 'district') {
       return [];
+    } else if (props.filter === 'name') {
+      return mapLegislatorsToOptions(NationalCongress.congress);
     }
   }
 
@@ -86,6 +88,7 @@ export const CallListBuilder = (props: Props) => {
         component={BasicField}
         options={[
           { name: 'By committee', value: 'committee', disabled: props.type !== 'national' },
+          { name: 'By legislator\'s name', value: 'name', disabled: props.type !== 'national' },
           { name: 'By user\'s district', value: 'district' },
         ]}
       />
@@ -116,16 +119,7 @@ export const CallListBuilder = (props: Props) => {
           options={getNationalSubcommitteeOptions(props.committee)}
         />
       }
-      {false && filter === 'district' &&
-        <Forms.Field
-          name={'state'}
-          label={'State'}
-          componentClass={'select'}
-          component={BasicField}
-          options={states}
-        />
-      }
-      {filter === 'committee' &&
+      {(filter === 'committee' || filter === 'name') &&
         <Forms.FieldArray
           name={'list'}
           label={'Call List'}
