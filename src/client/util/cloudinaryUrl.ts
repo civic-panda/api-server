@@ -35,7 +35,7 @@ export const createUrl = (id: string, options: Options) => {
     return 'data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==';
   }
 
-  const scheme = options.secure ? 'https' : 'http';
+  const scheme = options.secure === false ? 'http' : 'https';
   const params: string[] = [];
 
   for (let i = 0; i < TYPES.length; i++) {
