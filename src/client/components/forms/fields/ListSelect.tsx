@@ -80,7 +80,8 @@ function ListComponent<T>(props: ListProps<T>) {
                 <BS.Glyphicon glyph={'plus-sign'} />
               </BS.Button>
               &nbsp;
-              {repToString(item.value)}, Rank #{item.value.rank}
+              {repToString(item.value)}
+              {item.value.rank && `, Rank #${item.value.rank}`}
             </BS.Col>
           ))}
         </BS.Well>

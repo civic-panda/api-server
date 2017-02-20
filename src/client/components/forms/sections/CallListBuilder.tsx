@@ -3,10 +3,11 @@ import * as Forms from 'redux-form';
 
 import { BasicField, ListSelect } from '../fields';
 import * as NationalCongress from '../../../../congress';
+import states from './states';
 
 interface Props {
   type: 'national' | 'state',
-  filter: 'committee' | 'district' | 'none',
+  filter: 'committee' | 'district' | 'name' | 'none',
   state?: string;
   committee?: string;
   subcommittee?: string;
@@ -55,16 +56,13 @@ const getLegislators = (props: Props) => {
       return [];
     } else if (props.filter === 'district') {
       return [];
+    } else if (props.filter === 'name') {
+      return mapLegislatorsToOptions(NationalCongress.congress);
     }
   }
 
   return [];
 }
-
-const states = [
-  { name: 'Nationwide', value: 'USA' },
-  { name: 'New York', value: 'NY' },
-];
 
 export const CallListBuilder = (props: Props) => {
   const { filter } = props;
@@ -80,7 +78,7 @@ export const CallListBuilder = (props: Props) => {
         component={BasicField}
         options={[
           { name: 'National legislators', value: 'national' },
-          { name: 'State legislators', value: 'state', disabled: true },
+          { name: 'State legislators', value: 'state' },
         ]}
       />
       <Forms.Field
@@ -89,10 +87,20 @@ export const CallListBuilder = (props: Props) => {
         componentClass={'select'}
         component={BasicField}
         options={[
-          { name: 'By committee', value: 'committee' },
+          { name: 'By committee', value: 'committee', disabled: props.type !== 'national' },
+          { name: 'By legislator\'s name', value: 'name', disabled: props.type !== 'national' },
           { name: 'By user\'s district', value: 'district' },
         ]}
       />
+      {props.type === 'state' &&
+        <Forms.Field
+          name={'state'}
+          label={'State'}
+          componentClass={'select'}
+          component={BasicField}
+          options={states}
+        />
+      }
       {filter === 'committee' &&
         <Forms.Field
           name={'committee'}
@@ -111,16 +119,7 @@ export const CallListBuilder = (props: Props) => {
           options={getNationalSubcommitteeOptions(props.committee)}
         />
       }
-      {false && filter === 'district' &&
-        <Forms.Field
-          name={'state'}
-          label={'State'}
-          componentClass={'select'}
-          component={BasicField}
-          options={states}
-        />
-      }
-      {filter === 'committee' &&
+      {(filter === 'committee' || filter === 'name') &&
         <Forms.FieldArray
           name={'list'}
           label={'Call List'}

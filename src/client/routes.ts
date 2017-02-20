@@ -1,13 +1,17 @@
 import * as pages from './components/pages';
-// import { auth } from './modules'
+import * as redux from 'react-redux';
+import { AppState, auth, user, storage } from './modules'
 
 const scrollToTop = () => window.scrollTo(0, 0);
 
-const requireAuth = (_store: any) => (_nextState: any, _replace: any) => {
-  // const state = store.getState();
-  // if (!auth.selectors.isLoggedIn(state)) {
-  //   replace({ pathname: '/' });
-  // }
+const refreshData = (store: redux.Store<AppState>) => (_nextState: any, _replace: any) => {
+  // TODO more fine-grained data refreshing
+  const state = store.getState();
+  const isLoaded = storage.selectors.isLoaded(state);
+  if (isLoaded) {
+    const userId = auth.selectors.userId(state);
+    store.dispatch(user.load(userId));
+  }
 };
 
 function siteRoutes(store: any) {
@@ -18,11 +22,11 @@ function siteRoutes(store: any) {
     indexRoute: { component: pages.IndexRoute },
     onChange: scrollToTop,
     childRoutes: [
-      { name: 'volunteers', path: 'volunteers', component: pages.Volunteers, onEnter: requireAuth(store) },
-      { name: 'causes', path: 'causes', component: pages.Causes, onEnter: requireAuth(store) },
-      { name: 'cause', path: 'causes/:causeId', component: pages.Cause, onEnter: requireAuth(store) },
-      { name: 'tasks', path: 'tasks', component: pages.Tasks, onEnter: requireAuth(store) },
-      { name: 'task', path: 'tasks/:taskId', component: pages.Task, onEnter: requireAuth(store) },
+      { name: 'volunteers', path: 'volunteers', component: pages.Volunteers, onEnter: refreshData(store) },
+      { name: 'causes', path: 'causes', component: pages.Causes, onEnter: refreshData(store) },
+      { name: 'cause', path: 'causes/:causeId', component: pages.Cause, onEnter: refreshData(store) },
+      { name: 'tasks', path: 'tasks', component: pages.Tasks, onEnter: refreshData(store) },
+      { name: 'task', path: 'tasks/:taskId', component: pages.Task, onEnter: refreshData(store) },
     ],
   };
 }
