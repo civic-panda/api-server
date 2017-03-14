@@ -207,14 +207,29 @@ app.use('/', async (req, res) => {
   const url = sunlightUrl + req.url;
   const response = await fetch(url);
   const json = await response.json();
+  const selectCongressPerson = (congressPerson: congress.CongressPerson) => {
+    const repToString = (rep: congress.CongressPerson) => {
+      const currentTerm = rep.terms[rep.terms.length - 1];
+      return `${currentTerm.type === 'rep' ? 'Rep.' : 'Sen.'} ${rep.name.officialFull}, ${currentTerm.party[0]} ${currentTerm.state}`
+    }
+
+    return {
+      id: congressPerson.id.thomas,
+      value: repToString(congressPerson),
+      name: congressPerson.name.officialFull,
+      number: congressPerson.terms.slice(-1).pop().phone,
+      party: congressPerson.terms.slice(-1).pop().party,
+    };
+  }
 
   if (json.results && json.results.length) {
     const state = json.results[0].state;
     const district = json.results[0].district;
     const representatives = congress.getRepresentatives(state, district);
     const senators = congress.getSenators(state);
+    const callList = representatives.map(selectCongressPerson).concat(senators.map(selectCongressPerson));
 
-    res.json({ state, district, representatives, senators });
+    res.json({ state, district, representatives, senators, callList });
   } else {
     res.json({});
   }
@@ -224,6 +239,7 @@ app.use((err: any, _req: any, res: any) => {
   if (err.name === 'UnauthorizedError') {
     res.status(401).send('invalid token');
   }
+  console.warn('error', err)
 
   res.status(err.status).send(err);
 });
