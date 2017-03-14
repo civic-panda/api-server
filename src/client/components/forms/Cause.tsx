@@ -39,42 +39,42 @@ class Cause extends React.Component<any, {}>{
         />
         <Forms.Field
           name={'callToAction'}
-          label={'Call To Action'}
-          component={HtmlField}
+          label={'Call To Action (cause landing page headline)'}
+          component={BasicField}
+        />
+        <Forms.Field
+          name={'blurb'}
+          label={'Blurb (1-2 sentences describing cause)'}
+          component={BasicField}
         />
         <Forms.Field
           name={'logoImage'}
-          label={'Logo'}
+          label={'Logo (used in navbar)'}
           component={ImageField}
         />
         <Forms.Field
           name={'heroImage'}
-          label={'Hero Image (Across top of cause landing page)'}
+          label={'Hero Image (At top of cause landing page)'}
           component={ImageField}
         />
         <Forms.Field
           name={'placeholderImage'}
-          label={'Default Task Image (Will be cropped to square)'}
+          label={'Default Task Image (overridden if task has it\'s own image)'}
           component={ImageField}
         />
         <Forms.Field
-          name={'blurb'}
-          label={'Blurb'}
-          component={HtmlField}
-        />
-        <Forms.Field
           name={'summary'}
-          label={'Summary'}
+          label={'Summary (on cause landing page)'}
           component={HtmlField}
         />
         <Forms.Field
           name={'facts'}
-          label={'Key Facts'}
+          label={'Key Facts (on cause landing page)'}
           component={HtmlField}
         />
         <Forms.Field
           name={'reading'}
-          label={'Further Reading'}
+          label={'Further Reading (on cause landing page)'}
           component={HtmlField}
         />
         <br />

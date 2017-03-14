@@ -64,6 +64,23 @@ const getLegislators = (props: Props) => {
   return [];
 }
 
+const selectors = {
+  national: (congressPerson: NationalCongress.CongressPerson) => {
+    const repToString = (rep: NationalCongress.CongressPerson) => {
+      const currentTerm = rep.terms[rep.terms.length - 1];
+      return `${currentTerm.type === 'rep' ? 'Rep.' : 'Sen.'} ${rep.name.officialFull}, ${currentTerm.party[0]} ${currentTerm.state}`
+    }
+
+    return {
+      id: congressPerson.id.thomas,
+      value: repToString(congressPerson),
+      name: congressPerson.name.officialFull,
+      number: congressPerson.terms.slice(-1).pop().phone,
+      party: congressPerson.terms.slice(-1).pop().party,
+    };
+  }
+}
+
 export const CallListBuilder = (props: Props) => {
   const { filter } = props;
   const committees = props.type === 'national'
@@ -125,6 +142,7 @@ export const CallListBuilder = (props: Props) => {
           label={'Call List'}
           component={ListSelect}
           items={getLegislators(props)}
+          selectValue={selectors.national}
         />
       }
     </Forms.FormSection>
