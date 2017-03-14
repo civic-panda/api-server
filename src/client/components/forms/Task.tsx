@@ -5,7 +5,7 @@ import * as BS from 'react-bootstrap';
 
 import { scrollToTop } from '../../util/scrollToTop';
 import { AppState, tasks } from '../../modules';
-import { BasicField, DateField, HtmlField, ImageField } from './fields';
+import { BasicField, DateField, ImageField } from './fields';
 import * as Templates from './task-templates';
 
 interface OwnProps {
@@ -46,7 +46,7 @@ class Task extends React.Component<any, {}>{
           <Forms.Field
             name={'summary'}
             label={'Summary'}
-            component={HtmlField}
+            component={BasicField}
           />
           <Forms.Field
             name={'image'}

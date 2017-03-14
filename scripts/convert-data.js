@@ -17,5 +17,5 @@ try {
       console.log(basename + ' converted to json');
     });
 } catch (e) {
-  console.log(e);
+  console.log('congress error', e);
 }

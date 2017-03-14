@@ -6,6 +6,7 @@ import wrapArray, { Props } from './wrapArray';
 
 interface ListProps<T> extends Props<T> {
   items: { key: string, name: string, value: any }[];
+  selectValue?: (item: any) => any;
 }
 
 const repToString = (rep: any) => {
@@ -19,7 +20,7 @@ const nayPopover = (<BS.Popover id="nay-top">Petition this legislator</BS.Popove
 
 const renderName = (props: Forms.WrappedFieldProps<any>) => (
   <span>
-    <span>{repToString(props.input.value)}</span>
+    <span>{props.input.value.name}</span>
     <BS.ButtonGroup className={'pull-right'} bsSize={'small'}>
       <BS.OverlayTrigger trigger={['hover', 'focus']} placement={'top'} overlay={yeaPopover}>
         <BS.Button
@@ -60,7 +61,11 @@ function ListComponent<T>(props: ListProps<T>) {
         <BS.Well bsSize={'sm'} style={{ maxHeight: '250px', overflow: 'auto' }}>
           {props.fields.map((item: any, index) => (
             <BS.Col key={item}>
-              <BS.Button bsSize={'sm'} bsStyle={'danger'} onClick={() => props.fields.remove(index)}>
+              <BS.Button
+                bsSize={'sm'}
+                bsStyle={'danger'}
+                onClick={() => props.fields.remove(index)}
+              >
                 <BS.Glyphicon glyph={'minus-sign'} />
               </BS.Button>
               &nbsp;
@@ -76,7 +81,14 @@ function ListComponent<T>(props: ListProps<T>) {
         <BS.Well bsSize={'sm'} style={{ maxHeight: '250px', overflow: 'auto' }}>
           {props.items.map(item => (
             <BS.Col key={item.value.id.bioguide}>
-              <BS.Button bsSize={'sm'} onClick={() => props.fields.push(item.value)}>
+              <BS.Button
+                bsSize={'sm'}
+                onClick={
+                  () => props.selectValue
+                    ? props.fields.push(props.selectValue(item.value))
+                    : props.fields.push(item.value)
+                }
+              >
                 <BS.Glyphicon glyph={'plus-sign'} />
               </BS.Button>
               &nbsp;
