@@ -1,6 +1,6 @@
 
 /**
- * AUTO-GENERATED FILE @ 2017-02-09 21:04:55 - DO NOT EDIT!
+ * AUTO-GENERATED FILE @ 2017-03-14 21:58:09 - DO NOT EDIT!
  *
  * This file was generated with schemats node package:
  * $ schemats generate -c postgres://username:password@localhost/actonthis -o src/db/schema.ts
@@ -124,6 +124,26 @@ export interface roles {
     name: rolesFields.name;
     createdAt: rolesFields.createdAt;
     updatedAt: rolesFields.updatedAt;
+
+}
+
+export namespace demo_requestsFields {
+    export type id = string;
+    export type email = string | null;
+    export type name = string | null;
+    export type phoneNumber = string | null;
+    export type createdAt = Date;
+    export type updatedAt = Date;
+
+}
+
+export interface demo_requests {
+    id: demo_requestsFields.id;
+    email: demo_requestsFields.email;
+    name: demo_requestsFields.name;
+    phoneNumber: demo_requestsFields.phoneNumber;
+    createdAt: demo_requestsFields.createdAt;
+    updatedAt: demo_requestsFields.updatedAt;
 
 }
 
