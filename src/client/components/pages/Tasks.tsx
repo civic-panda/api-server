@@ -65,7 +65,7 @@ class TasksPage extends React.Component<Props, State> {
             <DownloadButton data={this.props.tasks} name={'tasks'} />
           </BS.ButtonToolbar>
         </BS.PageHeader>
-        <Tables.Tasks tasks={tasks} causes={causes} />
+        <Tables.Tasks tasks={tasks} causes={causes} createTask={this.props.createTask} />
       </BS.Col>
     );
   }

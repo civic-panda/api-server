@@ -4,6 +4,6 @@
   "exec": "ts-node src/index.ts",
   "ext": "ts",
   "env": {
-    "NODE_ENV": "development"
+    "NODE_ENV": "local"
   }
 }
