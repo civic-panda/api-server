@@ -9,8 +9,7 @@ interface Props {
   task: tasks.Task;
   canEdit: boolean;
   canDelete: boolean;
-  // publish(): void;
-  // unpublish(): void;
+  duplicate(props: any): void;
   size?: BS.Sizes;
   floatRight?: boolean;
 }
@@ -25,7 +24,12 @@ const ActionButtonComponent = (props: Props) => {
       onClick={() => hashHistory.push(`tasks/${props.task.id}`)}
       pullRight
     >
-      <BS.MenuItem eventKey="1">Duplicate</BS.MenuItem>
+      <BS.MenuItem
+        eventKey="1"
+        onClick={() => props.duplicate({ ...props.task, id: undefined })}
+      >
+        Duplicate
+      </BS.MenuItem>
       <BS.MenuItem divider />
       <BS.MenuItem eventKey="2" disabled={!props.canDelete}>Delete</BS.MenuItem>
     </BS.SplitButton>
@@ -39,10 +43,5 @@ const mapStateToProps = (state: AppState, ownProps: Partial<Props>) => {
     canDelete: permissions.can(cause.roleName, 'delete', 'task'),
   }
 };
-
-// const mapDispatchToProps = (dispatch: any, ownProps: Partial<Props>) => ({
-  // publish: () => dispatch(tasks.update(ownProps.task)({ published: true })),
-  // unpublish: () => dispatch(tasks.update(ownProps.task)({ published: false })),
-// })
 
 export const TaskActionButton = connect(mapStateToProps)(ActionButtonComponent);

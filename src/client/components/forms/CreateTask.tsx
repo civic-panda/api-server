@@ -32,7 +32,7 @@ class CreateTask extends React.Component<any, {}>{
         <BS.ButtonToolbar>
           <BS.Button
             onClick={this.props.handleSubmit}
-            disabled={this.props.submitting || this.props.pristine}
+            disabled={this.props.submitting || (this.props.initialValues.name ? false : this.props.pristine)}
             bsStyle={'primary'}
             type={'submit'}
             block
