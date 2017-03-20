@@ -18,6 +18,7 @@ const alchemy_language = watson.alchemy_language({
 const cmsUrl = 'https://admin.actonthis.org';
 // const cmsUrl = 'https://act-on-this-cms-staging.herokuapp.com';
 const sunlightUrl = 'https://congress.api.sunlightfoundation.com';
+const openstatesUrl = 'https://openstates.org';
 const app = express();
 
 app.use(morgan('dev'));
@@ -202,6 +203,33 @@ app.post('/email-subscribers', async (req, res) => {
 app.use('/test', (_req, res) => {
   res.sendStatus(200);
 })
+
+interface OpenstatesPerson {
+ id: string;
+ full_name: string;
+ party: string;
+ district: string;
+ state: string;
+ chamber: string;
+ offices: {
+  phone: string;
+ }[]
+}
+
+app.use('/openstates', async (req, res) => {
+  const url = openstatesUrl + req.url;
+  const response = await fetch(url);
+  const json: OpenstatesPerson[] = await response.json();
+  res.json({
+    callList: json.map(person => ({
+      id: person.id,
+      value: person.full_name,
+      name: `${person.full_name}, ${person.party[0]} ${person.state.toUpperCase()}, ${person.chamber} chamber district ${person.district}`,
+      number: person.offices.map(office => office.phone).join(', '),
+      party: person.party,
+    }))
+  })
+});
 
 app.use('/', async (req, res) => {
   const url = sunlightUrl + req.url;
