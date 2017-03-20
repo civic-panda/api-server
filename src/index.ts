@@ -224,7 +224,7 @@ app.use('/openstates', async (req, res) => {
     callList: json.map(person => ({
       id: person.id,
       value: person.full_name,
-      name: `${person.full_name}, ${person.party[0]} ${person.state}, ${person.chamber} chamber  district ${person.district}`,
+      name: `${person.full_name}, ${person.party[0]} ${person.state.toUpperCase()}, ${person.chamber} chamber district ${person.district}`,
       number: person.offices.map(office => office.phone).join(', '),
       party: person.party,
     }))
