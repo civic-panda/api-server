@@ -9,7 +9,7 @@ type Config = {
 
 const local: Config = {
   jwtSecret: '992697AFFB446FE665D556D5DEE131DE726ABD7D1D2D8BA2D1A17B0051D1D66B',
-  user: 'mattcasey',
+  user: 'postgres',
   host: undefined,
   port: undefined,
   password: undefined,
