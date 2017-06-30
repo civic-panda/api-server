@@ -218,17 +218,28 @@ interface OpenstatesPerson {
 
 app.use('/openstates', async (req, res) => {
   const url = openstatesUrl + req.url;
-  const response = await fetch(url);
-  const json: OpenstatesPerson[] = await response.json();
-  res.json({
-    callList: json.map(person => ({
-      id: person.id,
-      value: person.full_name,
-      name: `${person.full_name}, ${person.party[0]} ${person.state.toUpperCase()}, ${person.chamber} chamber district ${person.district}`,
-      number: person.offices.map(office => office.phone).join(', '),
-      party: person.party,
-    }))
-  })
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'X-API-KEY': '3c3cbd0d-c3e0-48eb-ad50-0cbd096a0bdd'
+      }
+    });
+    const json: OpenstatesPerson[] = await response.json();
+    res.json({
+      callList: json.map(person => ({
+        id: person.id,
+        value: person.full_name,
+        name: `${person.full_name}, ${person.party[0]} ${person.state.toUpperCase()}, ${person.chamber} chamber district ${person.district}`,
+        number: person.offices.map(office => office.phone).join(', '),
+        party: person.party,
+      }))
+    })
+  } catch (e) {
+    res.json({
+      callList: [],
+      error: e,
+    })
+  }
 });
 
 app.use('/', async (req, res) => {
