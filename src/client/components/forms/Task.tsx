@@ -71,6 +71,7 @@ class Task extends React.Component<any, {}>{
             componentClass={'select'}
             component={BasicField}
             options={[
+              { name: '15 minutes', value: '15 minutes' },
               { name: '30 minutes', value: '30 minutes' },
               { name: 'One hour', value: 'one hour' },
               { name: 'Half day', value: 'half day' },
